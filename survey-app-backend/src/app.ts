@@ -1,13 +1,16 @@
 import express from 'express';
+import connectDB from './config/database.ts';
 const app = express();
+import userRouter from './controllers/user.ts';
 
 app.use(express.json());
 
+connectDB()
+
 app.get('/', (_req, res) => {
-  console.log('test')
   res.send('works')
 })
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
+app.use('api/users', userRouter)
+
+export default app;
