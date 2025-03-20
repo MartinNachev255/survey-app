@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import { MONGODB_URI } from './env.ts'
+import { MONGODB_URI } from './env';
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ const connectDB = async () => {
   try {
     await mongoose.connect(MONGODB_URI);
     console.log('Connected to MongoDB');
-  } catch (error : unknown) {
+  } catch (error: unknown) {
     if (error instanceof Error) {
       console.log('error connecting to MongoDB: ', error.message);
     }
@@ -18,4 +18,3 @@ const connectDB = async () => {
 };
 
 export default connectDB;
-

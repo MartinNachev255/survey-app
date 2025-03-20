@@ -1,37 +1,31 @@
-import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
-import { ZodError } from "zod";
-import { CustomError } from "../utils/customError";
-import { MongoServerError } from "mongodb";
+import { Request, Response, NextFunction } from 'express';
+import { ZodError } from 'zod';
+import { CustomError } from '../utils/customError';
 
-const errorHandler: ErrorRequestHandler = (
-  err,
+const errorHandler = (
+  err: Error,
   _req: Request,
   res: Response,
-  _next: NextFunction
-): void => {
-  console.error("Error:", err);
+  next: NextFunction,
+) => {
+  console.error('Error:', err);
 
-  let statusCode = 500;
-  let message = "Something went wrong!";
+  if (res.headersSent) {
+    return next(err);
+  }
 
   if (err instanceof CustomError) {
-    statusCode = err.statusCode;
-    message = err.message;
+    res.status(err.statusCode).json({ error: err.message });
+  } else if (
+    err.name === 'MongoServerError' &&
+    err.message.includes('E11000 duplicate key error')
+  ) {
+    res.status(400).json({ error: 'Expected `username` to be unique' });
+  } else if (err instanceof ZodError) {
+    res.status(400).json({ error: err.flatten() });
+  } else {
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-
-  else if (err.code === 11000) {
-    statusCode = 400;
-    const field = Object.keys(err.keyValue)[0]; // Get the field name
-    message = `Duplicate value for field: ${field}, please use a different one.`;
-  }
-
-  else if (err instanceof ZodError) {
-    statusCode = 400;
-    res.status(statusCode).json({ error: err.flatten() });
-    return;
-  }
-
-  res.status(statusCode).json({ error: message });
 };
 
 export default errorHandler;

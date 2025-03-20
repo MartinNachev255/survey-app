@@ -1,6 +1,6 @@
-import app from './src/app.ts'
-import { PORT } from './src/config/env.ts'
+import app from './src/app';
+import { PORT } from './src/config/env';
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
