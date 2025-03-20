@@ -1,25 +1,25 @@
-import bcrypt from 'bcrypt';
-const userRouter = require('express').Router()
+import express, { NextFunction } from 'express'
 import User from '../modules/User.ts';
 import { Request, Response } from 'express'
-import { newUserEnrty } from '../validation/user.validation.ts'
+import { newUserEnrty, newUserEnrtySchema } from '../validation/user.validation.ts'
+import userServices from '../services/user.service.ts'
+import { IUser } from '../types/user.types.ts';
 
+const userRouter = express.Router()
 
-userRouter.post('/', async (req: Request, res: Response) => {
-  const newUser = newUserEnrty(req.body)
+const newUserParser = (req: Request, _res: Response, next: NextFunction) => {
+  try {
+    newUserEnrtySchema.parse(req.body);
+    next()
+  } catch (error: unknown) {
+    next(error)
+  }
+}
 
-  const saltRound = 10
-  const passwordHash = await bcrypt.hash(newUser.password, saltRound)
-
-  const user = new User({
-    ...newUser,
-    password: passwordHash
-  })
-
-  const savedUser = await user.save()
-
-  res.status(201).json(savedUser)
-})
+userRouter.post('/', newUserParser, async (req: Request<unknown, unknown, IUser>, res: Response<IUser>, next: NextFunction) => {
+  const addedUser = await userServices.addUser(req.body, next);
+  res.json(addedUser);
+});
 
 userRouter.get('/', async (_req: Request, res: Response) => {
   const users = await User.find({})
@@ -27,4 +27,4 @@ userRouter.get('/', async (_req: Request, res: Response) => {
   res.json(users)
 })
 
-export default userRouter; 
+export default userRouter;

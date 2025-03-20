@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "start": "node index.ts",
+    "start": "tsx index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -19,10 +19,12 @@
     "@types/express": "^5.0.0",
     "eslint": "^9.22.0",
     "prettier": "^3.5.3",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1"
   },
   "dependencies": {
+    "@types/mongoose": "^5.11.96",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
