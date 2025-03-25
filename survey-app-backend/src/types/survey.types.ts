@@ -1,10 +1,12 @@
 export interface ISurvey {
   title: string;
   questions: IQuestion[];
+  user: object;
+  id: string;
 }
 
 export interface IQuestion {
-  title: string;
+  question: string;
   answers: IAnswer[];
 }
 
@@ -14,3 +16,5 @@ export interface IAnswer {
     timesAnswerd: number;
   };
 }
+
+export type NewSurveyEntry = Omit<ISurvey, 'id'>;

@@ -3,7 +3,7 @@ import User from '../modules/User';
 import { Request, Response } from 'express';
 import { newUserEnrtySchema } from '../validation/user.validation';
 import userServices from '../services/user.service';
-import { IUser } from '../types/user.types';
+import { NewUserEnrty } from '../types/user.types';
 
 const userRouter = express.Router();
 
@@ -20,8 +20,8 @@ userRouter.post(
   '/',
   newUserParser,
   async (
-    req: Request<unknown, unknown, IUser>,
-    res: Response<IUser>,
+    req: Request<unknown, unknown, NewUserEnrty>,
+    res: Response<NewUserEnrty>,
     next: NextFunction,
   ) => {
     const addedUser = await userServices.addUser(req.body, next);

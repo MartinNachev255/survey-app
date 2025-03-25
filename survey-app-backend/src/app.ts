@@ -4,6 +4,8 @@ const app = express();
 import userRouter from './controllers/user.controller';
 import loginRouter from './controllers/login.controller';
 import errorHandler from './middlewares/errorHandler';
+import surveyRouter from './controllers/survey.controller';
+import userAuth from './middlewares/userAuth';
 
 app.use(express.json());
 
@@ -15,6 +17,7 @@ app.get('/', (_req, res) => {
 
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/survey', userAuth.tokenExtractor, surveyRouter);
 app.use(errorHandler);
 
 export default app;

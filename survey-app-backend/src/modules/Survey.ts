@@ -1,10 +1,11 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { ISurvey } from '../types/survey.types';
 
 const surveySchema = new Schema<ISurvey>({
+  title: { type: String, required: true, unique: true },
   questions: [
     {
-      title: { type: String, required: true },
+      question: { type: String, required: true },
       answers: [
         {
           answerText: { type: String, require: true },
@@ -13,6 +14,18 @@ const surveySchema = new Schema<ISurvey>({
       ],
     },
   ],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+});
+
+surveySchema.set('toJSON', {
+  transform: (_document, retrurnedObject) => {
+    retrurnedObject.id = retrurnedObject._id.toString();
+    delete retrurnedObject._id;
+    delete retrurnedObject.__v;
+  },
 });
 
 const Survey = model<ISurvey>('Survey', surveySchema);

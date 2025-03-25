@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { IUser } from '../types/user.types';
 
 const userSchema = new Schema<IUser>({
@@ -17,6 +17,12 @@ const userSchema = new Schema<IUser>({
     required: true,
     minlength: 3,
   },
+  surveys: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: `Survey`,
+    },
+  ],
 });
 
 userSchema.set('toJSON', {

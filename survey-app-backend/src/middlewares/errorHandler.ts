@@ -20,7 +20,7 @@ const errorHandler = (
     err.name === 'MongoServerError' &&
     err.message.includes('E11000 duplicate key error')
   ) {
-    res.status(400).json({ error: 'Expected `username` to be unique' });
+    res.status(400).json({ error: err.message });
   } else if (err instanceof ZodError) {
     res.status(400).json({ error: err.flatten() });
   } else {
