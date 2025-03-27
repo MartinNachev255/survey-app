@@ -40,4 +40,18 @@ surveyRouter.post(
   },
 );
 
+surveyRouter.delete(
+  '/:id',
+  userAuth.userExtractor,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const surveyIsDeleted = await surveyService.deleteSurvey(
+      req.params.id,
+      (req as CustomRequest).user as IUser,
+      next,
+    );
+
+    if (surveyIsDeleted) res.status(204).end();
+  },
+);
+
 export default surveyRouter;

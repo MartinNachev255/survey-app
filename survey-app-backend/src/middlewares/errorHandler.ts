@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 import { CustomError } from '../utils/customError';
+import mongoose from 'mongoose';
 
 const errorHandler = (
   err: Error,
@@ -17,12 +18,15 @@ const errorHandler = (
   if (err instanceof CustomError) {
     res.status(err.statusCode).json({ error: err.message });
   } else if (
-    err.name === 'MongoServerError' &&
+    err instanceof mongoose.mongo.MongoServerError &&
     err.message.includes('E11000 duplicate key error')
   ) {
-    res.status(400).json({ error: err.message });
+    const keyValue = err.keyValue;
+    res.status(400).json({ error: `Duplicate key`, keyValue });
   } else if (err instanceof ZodError) {
     res.status(400).json({ error: err.flatten() });
+  } else if (err.message.includes('jwt expired')) {
+    res.status(401).json({ error: 'Expired token' });
   } else {
     res.status(500).json({ error: 'Internal Server Error' });
   }
