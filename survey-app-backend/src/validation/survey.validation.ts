@@ -14,3 +14,10 @@ export const newSurveyEntrySchema = z.object({
     }),
   ),
 });
+
+export const newAnswersEntrySchema = z.array(
+  z.object({
+    questionsIndex: z.number(),
+    answersIndex: z.number(),
+  }),
+);

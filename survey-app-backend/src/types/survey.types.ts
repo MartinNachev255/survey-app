@@ -18,3 +18,8 @@ export interface IAnswer {
 }
 
 export type NewSurveyEntry = Omit<ISurvey, 'id'>;
+
+export interface AnswersEntry {
+  questionsIndex: number;
+  answersIndex: number;
+}

@@ -1,5 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { newSurveyEntrySchema } from '../validation/survey.validation';
+import {
+  newSurveyEntrySchema,
+  newAnswersEntrySchema,
+} from '../validation/survey.validation';
 import { NewSurveyEntry } from '../types/survey.types';
 import userAuth from '../middlewares/userAuth';
 import surveyService from '../services/survey.service';
@@ -51,6 +54,38 @@ surveyRouter.delete(
     );
 
     if (surveyIsDeleted) res.status(204).end();
+  },
+);
+
+const newAnsersEntryParser = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  try {
+    newAnswersEntrySchema.parse(req.body);
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+surveyRouter.post(
+  '/:id/respond',
+  newAnsersEntryParser,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const surveyID = req.params.id;
+
+    const updatedAnswers = await surveyService.incrementAnswers(
+      surveyID,
+      req.body,
+      next,
+    );
+
+    res.status(200).json({
+      success: true,
+      modifiedContent: updatedAnswers?.modifiedCount,
+    });
   },
 );
 
