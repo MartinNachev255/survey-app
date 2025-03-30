@@ -49,15 +49,37 @@ const deleteSurvey = async (
   }
 };
 
+const updateSurvey = async (
+  surveyId: string,
+  survey: NewSurveyEntry,
+  user: IUser,
+  next: NextFunction,
+) => {
+  try {
+    const surveyToUpdate = await Survey.findById(surveyId);
+
+    if (surveyToUpdate?.user.toString() !== user.id) {
+      throw new CustomError('unauthorized', 401);
+    }
+
+    const updatedSurvey = await Survey.findByIdAndUpdate(surveyId, survey);
+
+    return updatedSurvey;
+  } catch (error) {
+    next(error);
+    return;
+  }
+};
+
 const incrementAnswers = async (
-  SurveyID: string,
+  surveyID: string,
   answers: AnswersEntry[],
   next: NextFunction,
 ) => {
   try {
     const updateOperations = answers.map((answer) => ({
       updateOne: {
-        filter: { _id: SurveyID },
+        filter: { _id: surveyID },
         update: {
           $inc: {
             [`questions.${answer.questionsIndex}.answers.${answer.answersIndex}.timesAnswerd`]: 1,
@@ -78,5 +100,6 @@ const incrementAnswers = async (
 export default {
   createNewSurvey,
   deleteSurvey,
+  updateSurvey,
   incrementAnswers,
 };

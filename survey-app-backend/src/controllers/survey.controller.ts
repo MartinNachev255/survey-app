@@ -1,29 +1,21 @@
 import express, { Request, Response, NextFunction } from 'express';
-import {
-  newSurveyEntrySchema,
-  newAnswersEntrySchema,
-} from '../validation/survey.validation';
 import { NewSurveyEntry } from '../types/survey.types';
 import userAuth from '../middlewares/userAuth';
 import surveyService from '../services/survey.service';
 import { IUser } from '../types/user.types';
 import { JwtPayload } from 'jsonwebtoken';
+import {
+  newSurveyParser,
+  newAnsersEntryParser,
+} from '../utils/validationParsers';
 
 const surveyRouter = express.Router();
 
 interface CustomRequest extends Request {
   token: string | JwtPayload;
+  id: string;
   user?: unknown;
 }
-
-const newSurveyParser = (req: Request, _res: Response, next: NextFunction) => {
-  try {
-    newSurveyEntrySchema.parse(req.body);
-    next();
-  } catch (error: unknown) {
-    next(error);
-  }
-};
 
 surveyRouter.post(
   '/',
@@ -43,6 +35,31 @@ surveyRouter.post(
   },
 );
 
+surveyRouter.put(
+  '/:id',
+  newSurveyParser,
+  userAuth.userExtractor,
+  async (
+    req: Request<{ id: string }, unknown, NewSurveyEntry>,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const updatedSurvey = await surveyService.updateSurvey(
+      req.params.id,
+      req.body,
+      (req as unknown as CustomRequest).user as IUser,
+      next,
+    );
+
+    if (updatedSurvey) {
+      res.status(200).json({
+        success: true,
+        updatedSurveyID: updatedSurvey?.id,
+      });
+    }
+  },
+);
+
 surveyRouter.delete(
   '/:id',
   userAuth.userExtractor,
@@ -56,19 +73,6 @@ surveyRouter.delete(
     if (surveyIsDeleted) res.status(204).end();
   },
 );
-
-const newAnsersEntryParser = (
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-) => {
-  try {
-    newAnswersEntrySchema.parse(req.body);
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
 
 surveyRouter.post(
   '/:id/respond',
