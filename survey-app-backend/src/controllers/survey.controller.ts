@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { NewSurveyEntry } from '../types/survey.types';
+import { NewSurveyEntry, ISurvey } from '../types/survey.types';
 import userAuth from '../middlewares/userAuth';
 import surveyService from '../services/survey.service';
 import { IUser } from '../types/user.types';
@@ -16,6 +16,22 @@ interface CustomRequest extends Request {
   id: string;
   user?: unknown;
 }
+
+surveyRouter.get(
+  '/',
+  async (_req: Request, res: Response<ISurvey[]>, next: NextFunction) => {
+    const surveys = await surveyService.getAllSurveys(next);
+    if (surveys) res.status(200).json(surveys);
+  },
+);
+
+surveyRouter.get(
+  '/:id',
+  async (req: Request, res: Response<ISurvey>, next: NextFunction) => {
+    const survey = await surveyService.getSurveyById(req.params.id, next);
+    if (survey) res.status(200).json(survey);
+  },
+);
 
 surveyRouter.post(
   '/',

@@ -5,6 +5,26 @@ import { IUser } from '../types/user.types';
 import User from '../modules/User';
 import { CustomError } from '../utils/customError';
 
+const getAllSurveys = async (next: NextFunction) => {
+  try {
+    const surveys = await Survey.find({});
+    return surveys;
+  } catch (error) {
+    next(error);
+    return;
+  }
+};
+
+const getSurveyById = async (surveyID: string, next: NextFunction) => {
+  try {
+    const survey = await Survey.findById(surveyID);
+    return survey;
+  } catch (error) {
+    next(error);
+    return;
+  }
+};
+
 const createNewSurvey = async (
   survey: NewSurveyEntry,
   user: IUser,
@@ -98,6 +118,8 @@ const incrementAnswers = async (
 };
 
 export default {
+  getAllSurveys,
+  getSurveyById,
   createNewSurvey,
   deleteSurvey,
   updateSurvey,
