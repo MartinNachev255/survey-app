@@ -10,15 +10,25 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from '@mui/icons-material/Adb';
+import MenuItem from '@mui/material/MenuItem';
+import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
+// import AdbIcon from '@mui/icons-material/Adb';
 
-const pages = ['Home', 'Create survey', 'Login'];
+const pages = ['Home', 'Surveys', 'Create survey', 'Login'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
+
+  const user = useSelector((state: any) => state.user);
+
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null,
+  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null,
+  );
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -43,7 +53,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            onClick={() => navigate('/')}
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -84,6 +94,9 @@ function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
+              {/* !!!!!!!!!!!!!!!!!!
+                  NEED TO REMOVE MAP 
+                  !!!!!!!!!!!!!!!!!*/}
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
@@ -105,21 +118,53 @@ function ResponsiveAppBar() {
               letterSpacing: '.2rem',
               color: 'inherit',
               textDecoration: 'none',
-              fontSize: '1.2rem'
+              fontSize: '1.2rem',
             }}
           >
             Survey-app
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {/* {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => {
+                  handleCloseNavMenu
+                  navigate(`/${page.replace(/ /g,'').toLowerCase()}`)
+                }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
               </Button>
-            ))}
+            ))} */}
+            <Button
+              onClick={() => {
+                handleCloseNavMenu;
+                navigate(`/home`);
+              }}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Home
+            </Button>
+            <Button
+              onClick={() => {
+                handleCloseNavMenu;
+                navigate(`/surveys`);
+              }}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Surveys
+            </Button>
+            {!user && (
+              <Button
+                onClick={() => {
+                  handleCloseNavMenu;
+                  navigate(`/login`);
+                }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Login
+              </Button>
+            )}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
@@ -145,7 +190,9 @@ function ResponsiveAppBar() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                  <Typography sx={{ textAlign: 'center' }}>
+                    {setting}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>

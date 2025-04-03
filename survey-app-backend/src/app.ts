@@ -6,7 +6,9 @@ import loginRouter from './controllers/login.controller';
 import errorHandler from './middlewares/errorHandler';
 import surveyRouter from './controllers/survey.controller';
 import userAuth from './middlewares/userAuth';
+import cors from 'cors';
 
+app.use(cors())
 app.use(express.json());
 
 connectDB();
