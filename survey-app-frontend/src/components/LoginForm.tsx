@@ -20,7 +20,7 @@ const LoginForm = () => {
         username,
         password,
       });
-      // window.localStorage.setItem('loggedInUser', JSON.stringify(user))
+      window.localStorage.setItem('loggedSurveyAppUser', JSON.stringify(user));
       surveyService.setToken(user.token);
       dispatch(setUser(user));
       navigate('/surveys');
