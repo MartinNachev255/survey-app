@@ -78,20 +78,11 @@ const Surveys = () => {
                     // Custom hover effect
                     '&:hover': {
                       backgroundColor: 'action.hover', // Use theme's hover color
-                      '.MuiListItemText-primary': {
-                        // Example: Make text bolder on hover
-                        // fontWeight: 'bold', // Uncomment if desired
-                      },
-                      '.MuiAvatar-root': {
-                        // Example: Slightly scale avatar on hover
-                        // transform: 'scale(1.1)', // Uncomment if desired
-                      },
                     },
                     py: 1.5, // Increase vertical padding for better spacing
                   }}
                   // onClick={() => handleSurveyClick(survey.id)} // Add interaction logic
                 >
-                  <ListItemIcon></ListItemIcon>
                   <ListItemText
                     primary={survey.title}
                     // Make the primary text slightly bolder
