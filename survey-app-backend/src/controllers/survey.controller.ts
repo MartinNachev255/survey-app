@@ -36,6 +36,7 @@ surveyRouter.get(
 surveyRouter.post(
   '/',
   newSurveyParser,
+  userAuth.tokenExtractor,
   userAuth.userExtractor,
   async (
     req: Request<unknown, unknown, NewSurveyEntry>,
@@ -54,6 +55,7 @@ surveyRouter.post(
 surveyRouter.put(
   '/:id',
   newSurveyParser,
+  userAuth.tokenExtractor,
   userAuth.userExtractor,
   async (
     req: Request<{ id: string }, unknown, NewSurveyEntry>,
@@ -78,6 +80,7 @@ surveyRouter.put(
 
 surveyRouter.delete(
   '/:id',
+  userAuth.tokenExtractor,
   userAuth.userExtractor,
   async (req: Request, res: Response, next: NextFunction) => {
     const surveyIsDeleted = await surveyService.deleteSurvey(
@@ -92,6 +95,7 @@ surveyRouter.delete(
 
 surveyRouter.post(
   '/:id/respond',
+  userAuth.tokenExtractor,
   newAnsersEntryParser,
   async (req: Request, res: Response, next: NextFunction) => {
     const surveyID = req.params.id;

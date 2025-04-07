@@ -1,18 +1,20 @@
 import ResponsiveAppBar from './components/ResponsiveAppBar';
-// import { useSelector } from 'react-redux';
 import RoutesComponent from './components/Routes';
-import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUserFromLocalStorage } from './utils/loginUserLocalStorage';
+import { RootStore } from './utils/store';
+import { IUser } from './utils/types';
 
 const App = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  // const user = useSelector((state: any) => state.user);
+
+  const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
   useEffect(() => {
-    loginUserFromLocalStorage(dispatch, navigate);
+    if (!user) {
+      loginUserFromLocalStorage(dispatch);
+    }
   }, []);
 
   return (

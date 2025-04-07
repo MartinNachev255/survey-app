@@ -5,10 +5,9 @@ import userRouter from './controllers/user.controller';
 import loginRouter from './controllers/login.controller';
 import errorHandler from './middlewares/errorHandler';
 import surveyRouter from './controllers/survey.controller';
-import userAuth from './middlewares/userAuth';
 import cors from 'cors';
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 connectDB();
@@ -19,7 +18,7 @@ app.get('/', (_req, res) => {
 
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
-app.use('/api/survey', userAuth.tokenExtractor, surveyRouter);
+app.use('/api/survey', surveyRouter);
 app.use(errorHandler);
 
 export default app;

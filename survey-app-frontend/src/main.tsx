@@ -13,7 +13,9 @@ const darkTheme = createTheme({
   },
 });
 
-createRoot(document.getElementById('root')!).render(
+const rootElement = document.getElementById('root') as HTMLElement;
+
+createRoot(rootElement).render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>

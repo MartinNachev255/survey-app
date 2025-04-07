@@ -7,21 +7,20 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
-// import AdbIcon from '@mui/icons-material/Adb';
-
-const pages = ['Home', 'Surveys', 'Create survey', 'Login'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { IUser } from '../utils/types';
+import { RootStore } from '../utils/store';
+import { useDispatch } from 'react-redux';
+import { clearUser } from '../reducers/userReducer';
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const user = useSelector((state: any) => state.user);
+  const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
@@ -32,9 +31,6 @@ function ResponsiveAppBar() {
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -95,21 +91,21 @@ function ResponsiveAppBar() {
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: 'block', md: 'none' } }}
               >
-                {/* !!!!!!!!!!!!!!!!!!
-                  NEED TO REMOVE MAP 
-                  !!!!!!!!!!!!!!!!!*/}
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>Home</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>
+                    Create Survey
+                  </Typography>
+                </MenuItem>
               </Menu>
             </Box>
             <Typography
               variant="h5"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href="/"
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -120,27 +116,16 @@ function ResponsiveAppBar() {
                 color: 'inherit',
                 textDecoration: 'none',
                 fontSize: '1.2rem',
+                cursor: 'pointer',
               }}
             >
               Survey-app
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {/* {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={() => {
-                  handleCloseNavMenu
-                  navigate(`/${page.replace(/ /g,'').toLowerCase()}`)
-                }}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))} */}
               <Button
                 onClick={() => {
                   handleCloseNavMenu();
-                  navigate(`/home`);
+                  navigate(`/`);
                 }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
@@ -149,30 +134,37 @@ function ResponsiveAppBar() {
               <Button
                 onClick={() => {
                   handleCloseNavMenu();
-                  navigate(`/surveys`);
+                  navigate(`/createsurvey`);
                 }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                Surveys
+                Create Survey
               </Button>
-              {!user && (
-                <Button
-                  onClick={() => {
-                    handleCloseNavMenu();
-                    navigate(`/login`);
-                  }}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  Login
-                </Button>
-              )}
             </Box>
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
+              {location.pathname !== '/login' &&
+                (user ? (
+                  <Button
+                    variant="text"
+                    color="primary"
+                    size="small"
+                    onClick={() => {
+                      window.localStorage.removeItem('loggedSurveyAppUser');
+                      dispatch(clearUser());
+                    }}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <Button
+                    variant="text"
+                    color="primary"
+                    size="small"
+                    onClick={() => navigate('/login')}
+                  >
+                    Login
+                  </Button>
+                ))}
               <Menu
                 sx={{ mt: '45px' }}
                 id="menu-appbar"
@@ -188,15 +180,7 @@ function ResponsiveAppBar() {
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: 'center' }}>
-                      {setting}
-                    </Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
+              ></Menu>
             </Box>
           </Toolbar>
         </Container>

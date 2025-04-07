@@ -1,7 +1,8 @@
 import { createSlice, Dispatch } from '@reduxjs/toolkit';
 import surveyServices from '../services/surveys';
+import { ISurvey } from '../utils/types';
 
-const initialState: Array<object> = [];
+const initialState: ISurvey[] = [];
 
 const surveySlice = createSlice({
   name: 'surveys',

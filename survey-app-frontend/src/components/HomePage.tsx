@@ -5,28 +5,40 @@ import {
   Card,
   CardContent,
   Stack,
-  Link as MuiLink, // Use MuiLink for consistency or regular Link
-  Paper, // Use Paper for the header background
-  useTheme, // To access theme colors for hover effects
-  Button,
+  Link as MuiLink,
+  Paper,
+  useTheme,
   Divider,
+  Button,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material';
 import { Add } from '@mui/icons-material';
-import { Link as RouterLink } from 'react-router-dom'; // Assuming React Router
+import { Link as RouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { AppDispatch, RootStore } from '../utils/store';
+import { ISurvey, IUser } from '../utils/types';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { initializeSurveys } from '../reducers/surveyReducer';
 
 const HomePage = () => {
-  const theme = useTheme(); // Access theme for hover color
+  const theme = useTheme();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const surveys = useSelector((state: any) => state.surveys);
-  const user = useSelector((state: any) => state.user);
+  const user = useSelector<RootStore, IUser | null>((state) => state.user);
+
+  useEffect(() => {
+    dispatch(initializeSurveys());
+  }, [dispatch]);
+
+  const surveys = useSelector<RootStore, ISurvey[]>((state) => state.surveys);
+
+  console.log('SURVEYS:', surveys);
 
   return (
     <Box>
       <Paper
         square
-        elevation={0.75}
+        elevation={1}
         sx={{
           borderBottom: `1px solid ${theme.palette.divider}`,
           pt: 6,
@@ -58,9 +70,9 @@ const HomePage = () => {
         </Container>
       </Paper>
 
-      {/* --- Available Surveys Section --- */}
+      {/* --- Surveys Section --- */}
       <Container maxWidth="md" sx={{ mb: 6 }}>
-        {user && (
+        {user ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
             <Button
               variant="contained"
@@ -71,8 +83,13 @@ const HomePage = () => {
               Create Survey
             </Button>
           </Box>
+        ) : (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+            <Button variant="contained" component={RouterLink} to={'/login'}>
+              Login to create Survey
+            </Button>
+          </Box>
         )}
-
         <Paper
           sx={{
             pb: 2.5,
@@ -81,9 +98,9 @@ const HomePage = () => {
           <Typography
             variant="h5"
             component="h2"
-            gutterBottom // Adds space below the heading
+            gutterBottom
             align="center"
-            sx={{ pt: 1 }} // More specific margin if needed
+            sx={{ pt: 1 }}
           >
             Available Surveys
           </Typography>
@@ -97,7 +114,6 @@ const HomePage = () => {
                   sx={{
                     transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
                     '&:hover': {
-                      // Subtle hover effect for outlined card
                       borderColor: 'primary.main',
                       boxShadow: `0 1px 4px 0 ${theme.palette.primary.dark}`,
                     },
@@ -106,18 +122,14 @@ const HomePage = () => {
                   <CardContent sx={{ paddingBottom: '16px !important' }}>
                     <MuiLink
                       component={RouterLink}
-                      to={`/survey/${survey.id}`} // Your survey route
-                      underline="hover" // Show underline only on hover
-                      variant="h6" // Use Typography variant for styling
-                      color="text.primary" // Use primary text color, link will inherit hover from MuiLink
+                      to={`/survey/${survey.id}`}
+                      underline="hover"
+                      variant="h6"
+                      color="text.primary"
                       sx={{
-                        display: 'block', // Make link block level for easier clicking
-                        mb: 1, // Margin below title
+                        display: 'block',
+                        mb: 1,
                         fontWeight: 'medium',
-                        '&:hover': {
-                          // Optional: specific color on hover if default isn't enough
-                          // color: 'primary.light'
-                        },
                       }}
                     >
                       {survey.title}
@@ -128,7 +140,7 @@ const HomePage = () => {
                       color="text.secondary"
                       sx={{ mb: 1.5 }}
                     >
-                      {survey.description}
+                      survey.description
                     </Typography>
 
                     <Typography
@@ -136,9 +148,7 @@ const HomePage = () => {
                       color="text.secondary"
                       component="div"
                     >
-                      {' '}
-                      {/* Use div for block display */}
-                      {survey.questionCount} Questions
+                      {survey.questions.length} Questions
                     </Typography>
                   </CardContent>
                 </Card>

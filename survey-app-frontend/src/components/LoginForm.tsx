@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import loginService from '../services/login';
 import surveyService from '../services/surveys';
 import { setUser } from '../reducers/userReducer';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
+import { IUser } from '../utils/types';
+import { RootStore } from '../utils/store';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -12,6 +15,14 @@ const LoginForm = () => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const user = useSelector<RootStore, IUser | null>((state) => state.user);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -23,7 +34,7 @@ const LoginForm = () => {
       window.localStorage.setItem('loggedSurveyAppUser', JSON.stringify(user));
       surveyService.setToken(user.token);
       dispatch(setUser(user));
-      navigate('/home');
+      navigate('/');
     } catch (exception) {
       console.log(exception);
     }
@@ -35,12 +46,17 @@ const LoginForm = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      minHeight="100vh"
+      minHeight="90vh"
+      p={2}
     >
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" component="h1" gutterBottom>
         Login
       </Typography>
-      <form onSubmit={handleLogin} style={{ width: '100%', maxWidth: 400 }}>
+      <Box
+        component="form"
+        onSubmit={handleLogin}
+        sx={{ width: '100%', maxWidth: 400, mt: 1 }}
+      >
         <TextField
           label="Username"
           variant="outlined"
@@ -48,6 +64,7 @@ const LoginForm = () => {
           margin="normal"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          autoComplete="username"
         />
         <TextField
           label="Password"
@@ -57,17 +74,18 @@ const LoginForm = () => {
           margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          autoComplete="current-password"
         />
         <Button
           type="submit"
           variant="contained"
           color="primary"
           fullWidth
-          style={{ marginTop: 16 }}
+          sx={{ mt: 2, mb: 2 }}
         >
           Login
         </Button>
-      </form>
+      </Box>
     </Box>
   );
 };
