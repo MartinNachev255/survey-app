@@ -17,8 +17,10 @@ export interface IQuestion {
 }
 
 export interface IAnswer {
-  answer: {
-    answerText: string;
-    timesAnswerd: number;
-  };
+  answerText: string;
+  timesAnswerd: number;
+}
+export interface AnswerSelection {
+  questionsIndex: number;
+  answersIndex: number;
 }

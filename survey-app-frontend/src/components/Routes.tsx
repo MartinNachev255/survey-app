@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router';
 import LoginForm from './LoginForm';
 import HomePage from './HomePage';
+import SurveyResponseForm from './SurveyResponseForm';
 
 const RoutesComponent = () => {
   const PageNotFound = () => {
@@ -11,6 +12,7 @@ const RoutesComponent = () => {
     <Routes>
       <Route path="*" element={<PageNotFound />} />
       <Route path="/" element={<HomePage />} />
+      <Route path="/survey/:id" element={<SurveyResponseForm />} />
       <Route path="/login" element={<LoginForm />} />
     </Routes>
   );
