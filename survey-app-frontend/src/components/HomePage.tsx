@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Stack,
-  Link as MuiLink,
   Paper,
   useTheme,
   Divider,
@@ -119,37 +118,60 @@ const HomePage = () => {
                     },
                   }}
                 >
-                  <CardContent sx={{ paddingBottom: '16px !important' }}>
-                    <MuiLink
-                      component={RouterLink}
-                      to={`/survey/${survey.id}`}
-                      underline="hover"
-                      variant="h6"
-                      color="text.primary"
-                      sx={{
-                        display: 'block',
-                        mb: 1,
-                        fontWeight: 'medium',
-                      }}
-                    >
-                      {survey.title}
-                    </MuiLink>
+                  <CardContent
+                    sx={{
+                      paddingBottom: '16px !important',
+                      position: 'relative',
+                    }}
+                  >
+                    <Box>
+                      <Typography
+                        variant="h6"
+                        color="text.primary"
+                        sx={{
+                          display: 'block',
+                          mb: 1,
+                          fontWeight: 'medium',
+                        }}
+                      >
+                        {survey.title}
+                      </Typography>
 
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 1.5 }}
-                    >
-                      survey.description
-                    </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 1.5 }}
+                      >
+                        survey.description
+                      </Typography>
 
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      {survey.questions.length} Questions
-                    </Typography>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        component="div"
+                      >
+                        {survey.questions.length} Questions
+                      </Typography>
+                    </Box>
+                    <Box sx={{ position: 'absolute', bottom: 16, right: 16 }}>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        component={RouterLink}
+                        to={`/survey/${survey.id}/stats`}
+                        sx={{ mr: 1 }}
+                      >
+                        View
+                      </Button>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        component={RouterLink}
+                        to={`/survey/${survey.id}`}
+                      >
+                        Take Survey
+                      </Button>
+                    </Box>
                   </CardContent>
                 </Card>
               ))}

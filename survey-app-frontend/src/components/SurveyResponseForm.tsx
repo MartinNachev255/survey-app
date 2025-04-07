@@ -70,7 +70,7 @@ const SurveyResponseForm = () => {
         // TODO Replace console.log with notification
         console.log('Result:', result.success);
         setTimeout(() => {
-          navigate('/');
+          navigate(`/survey/${surveyID}/stats`);
         }, 1000);
       }
     }
