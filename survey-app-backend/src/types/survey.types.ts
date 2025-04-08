@@ -1,5 +1,6 @@
 export interface ISurvey {
   title: string;
+  description: string;
   questions: IQuestion[];
   user: object;
   id: string;

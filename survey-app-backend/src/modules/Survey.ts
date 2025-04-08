@@ -3,6 +3,7 @@ import { ISurvey } from '../types/survey.types';
 
 const surveySchema = new Schema<ISurvey>({
   title: { type: String, required: true, unique: true },
+  description: { type: String },
   questions: [
     {
       question: { type: String, required: true },
