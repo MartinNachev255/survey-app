@@ -131,12 +131,26 @@ const SurveyResponseForm = () => {
             </Box>
           </List>
         ))}
-        <Box
+        {/* <Box
           display="flex"
           justifyContent="flex-end"
           mt={4}
           pr={{ xs: 5, sm: 8, md: '14vh', lg: '25vh' }}
         >
+          <Button variant="contained" onClick={handleSubmit}>
+            Submit
+          </Button>
+        </Box> */}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          mt={4}
+          pr={{ xs: 2, sm: 3, md: '11vh', lg: '11vh' }}
+          pl={{ xs: 2, sm: 3, md: '11vh', lg: '11vh' }}
+        >
+          <Button variant="contained" onClick={() => navigate('/')}>
+            Back
+          </Button>
           <Button variant="contained" onClick={handleSubmit}>
             Submit
           </Button>

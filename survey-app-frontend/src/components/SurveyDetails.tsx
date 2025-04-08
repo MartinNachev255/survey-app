@@ -34,7 +34,7 @@ const SurveyDetails = () => {
         </Typography>
       </Box>
       <Divider />
-      <Box my={1}>
+      <Box my={2}>
         {survey?.questions.map((question, qIndex) => (
           <List key={qIndex}>
             <Typography
@@ -65,9 +65,9 @@ const SurveyDetails = () => {
         ))}
         <Box
           display="flex"
-          justifyContent="flex-end"
-          mt={4}
-          pr={{ xs: 5, sm: 8, md: '14vh', lg: '25vh' }}
+          justifyContent="flex-start"
+          mt={{ xs: 2.5, sm: 3, md: 5, lg: 5 }}
+          pl={{ xs: 2, sm: 3, md: '11vh', lg: '11vh' }}
         >
           <Button variant="contained" onClick={() => navigate('/')}>
             Back
