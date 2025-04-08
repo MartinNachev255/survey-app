@@ -50,14 +50,16 @@ const SurveyDetails = () => {
                 mx: { xs: 1, sm: 2, md: '5vh', lg: '5vh' },
               }}
             >
-              {question.answers.map((answer, aIndex) => (
-                <List key={aIndex}>
-                  <Typography variant="body1">
-                    {aIndex}. {answer.answerText}: Has been answerd{' '}
-                    {answer.timesAnswerd} times.
-                  </Typography>
-                </List>
-              ))}
+              {[...question.answers]
+                .sort((a, b) => b.timesAnswerd - a.timesAnswerd)
+                .map((answer, aIndex) => (
+                  <List key={aIndex}>
+                    <Typography variant="body1">
+                      {aIndex}. {answer.answerText}: Has been answerd{' '}
+                      {answer.timesAnswerd} times.
+                    </Typography>
+                  </List>
+                ))}
             </Box>
           </List>
         ))}

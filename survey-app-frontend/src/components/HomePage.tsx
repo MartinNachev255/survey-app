@@ -31,8 +31,6 @@ const HomePage = () => {
 
   const surveys = useSelector<RootStore, ISurvey[]>((state) => state.surveys);
 
-  console.log('SURVEYS:', surveys);
-
   return (
     <Box>
       <Paper
@@ -168,6 +166,7 @@ const HomePage = () => {
                         size="small"
                         component={RouterLink}
                         to={`/survey/${survey.id}`}
+                        disabled={user ? false : true}
                       >
                         Take Survey
                       </Button>

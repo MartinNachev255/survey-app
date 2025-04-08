@@ -9,21 +9,29 @@ import {
   IconButton,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router';
-import loginService from '../services/login';
+import registerService from '../services/register';
 import surveyService from '../services/surveys';
 import { setUser } from '../reducers/userReducer';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 import { IUser } from '../utils/types';
 import { RootStore } from '../utils/store';
-import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
@@ -33,17 +41,12 @@ const LoginForm = () => {
     }
   }, [user, navigate]);
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const user = await loginService.login({
+      const user = await registerService.register({
         username,
+        name,
         password,
       });
       window.localStorage.setItem('loggedSurveyAppUser', JSON.stringify(user));
@@ -65,7 +68,7 @@ const LoginForm = () => {
       p={2}
     >
       <Typography variant="h4" component="h1" gutterBottom>
-        Login
+        Sign up
       </Typography>
       <Box
         component="form"
@@ -79,6 +82,15 @@ const LoginForm = () => {
           margin="normal"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          autoComplete="username"
+        />
+        <TextField
+          label="Name"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           autoComplete="username"
         />
         <TextField
@@ -106,11 +118,11 @@ const LoginForm = () => {
           <MUILink
             component={RouterLink}
             underline="hover"
-            to={'/register'}
+            to={'/login'}
             variant="body1"
             color="text.primary"
           >
-            Click to Sign up
+            Click to Sign in
           </MUILink>
         </Box>
         <Button
@@ -120,11 +132,11 @@ const LoginForm = () => {
           fullWidth
           sx={{ mt: 2, mb: 2 }}
         >
-          Login
+          Sign up
         </Button>
       </Box>
     </Box>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

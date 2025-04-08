@@ -3,6 +3,7 @@ import LoginForm from './LoginForm';
 import HomePage from './HomePage';
 import SurveyResponseForm from './SurveyResponseForm';
 import SurveyDetails from './SurveyDetails';
+import RegisterForm from './RegisterForm';
 
 const RoutesComponent = () => {
   const PageNotFound = () => {
@@ -16,6 +17,7 @@ const RoutesComponent = () => {
       <Route path="/survey/:id" element={<SurveyResponseForm />} />
       <Route path="/survey/:id/stats" element={<SurveyDetails />} />
       <Route path="/login" element={<LoginForm />} />
+      <Route path="/register" element={<RegisterForm />} />
     </Routes>
   );
 };

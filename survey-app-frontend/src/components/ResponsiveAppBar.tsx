@@ -15,6 +15,7 @@ import { IUser } from '../utils/types';
 import { RootStore } from '../utils/store';
 import { useDispatch } from 'react-redux';
 import { clearUser } from '../reducers/userReducer';
+import { Avatar, Tooltip } from '@mui/material';
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
@@ -33,12 +34,21 @@ function ResponsiveAppBar() {
     setAnchorElNav(event.currentTarget);
   };
 
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const logout = () => {
+    window.localStorage.removeItem('loggedSurveyAppUser');
+    dispatch(clearUser());
   };
 
   return (
@@ -142,19 +152,45 @@ function ResponsiveAppBar() {
               </Button>
             </Box>
             <Box sx={{ flexGrow: 0 }}>
+              {user && (
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt={user?.name.toUpperCase()}
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+              )}
               {location.pathname !== '/login' &&
                 (user ? (
-                  <Button
-                    variant="text"
-                    color="primary"
-                    size="small"
-                    onClick={() => {
-                      window.localStorage.removeItem('loggedSurveyAppUser');
-                      dispatch(clearUser());
+                  <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
                     }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
                   >
-                    Logout
-                  </Button>
+                    <MenuItem
+                      onClick={() => {
+                        handleCloseUserMenu();
+                        logout();
+                      }}
+                    >
+                      <Typography sx={{ textAlign: 'center' }}>
+                        Logout
+                      </Typography>
+                    </MenuItem>
+                  </Menu>
                 ) : (
                   <Button
                     variant="text"
@@ -165,22 +201,6 @@ function ResponsiveAppBar() {
                     Login
                   </Button>
                 ))}
-              <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              ></Menu>
             </Box>
           </Toolbar>
         </Container>
