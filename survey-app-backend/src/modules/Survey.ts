@@ -19,6 +19,10 @@ const surveySchema = new Schema<ISurvey>({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  author: {
+    type: String,
+    ref: 'User.name',
+  },
 });
 
 surveySchema.set('toJSON', {

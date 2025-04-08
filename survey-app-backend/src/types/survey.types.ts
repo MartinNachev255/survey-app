@@ -3,6 +3,7 @@ export interface ISurvey {
   description: string;
   questions: IQuestion[];
   user: object;
+  author: string;
   id: string;
 }
 

@@ -100,6 +100,9 @@ const SurveyList = () => {
                         }}
                       >
                         {survey.title}
+                        <Typography variant="subtitle2" color="text.secondary">
+                          author: {survey.author}
+                        </Typography>
                       </Typography>
 
                       <Typography
@@ -107,7 +110,7 @@ const SurveyList = () => {
                         color="text.secondary"
                         sx={{ mb: 1.5 }}
                       >
-                        survey.description
+                        {survey.description || 'No description'}
                       </Typography>
 
                       <Typography
@@ -115,7 +118,7 @@ const SurveyList = () => {
                         color="text.secondary"
                         component="div"
                       >
-                        {survey.questions.length} Questions
+                        Questions: {survey.questions.length}
                       </Typography>
                     </Box>
                     <Box sx={{ position: 'absolute', bottom: 16, right: 16 }}>

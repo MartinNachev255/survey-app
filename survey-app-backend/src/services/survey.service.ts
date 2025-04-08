@@ -34,6 +34,7 @@ const createNewSurvey = async (
     const newSurvey = new Survey({
       ...survey,
       user: user.id,
+      author: user.name,
     });
 
     const savedSurvey = await newSurvey.save();

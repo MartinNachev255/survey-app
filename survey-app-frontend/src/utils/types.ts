@@ -6,8 +6,10 @@ export interface IUser {
 
 export interface ISurvey {
   title: string;
+  description: string;
   questions: IQuestion[];
   user: object;
+  author: string;
   id: string;
 }
 
