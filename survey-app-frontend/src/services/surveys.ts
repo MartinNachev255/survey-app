@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AnswerSelection } from '../utils/types';
+import { AnswerSelection, NewSurveyEntry } from '../utils/types';
 const baseUrl = 'http://localhost:3000/api/survey';
 
 let token: string | null = null;
@@ -28,6 +28,16 @@ const submitAnswers = async (surveyId: string, answers: AnswerSelection[]) => {
   return res.data;
 };
 
+const createNewSurvey = async (newSurvey: NewSurveyEntry) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const res = await axios.post(baseUrl, newSurvey, config);
+
+  return res.data;
+};
+
 const deleteSurvey = async (id: string) => {
   const config = {
     headers: { Authorization: token },
@@ -37,4 +47,10 @@ const deleteSurvey = async (id: string) => {
   return req.data;
 };
 
-export default { setToken, getAllSurveys, submitAnswers, deleteSurvey };
+export default {
+  setToken,
+  getAllSurveys,
+  createNewSurvey,
+  submitAnswers,
+  deleteSurvey,
+};

@@ -38,18 +38,21 @@ const HomePage = () => {
             gutterBottom
             sx={{ fontWeight: 'medium' }}
           >
-            Site description
+            Full-Stack Survey Application
           </Typography>
           <Typography
             variant="h6"
             component="p"
             color="text.secondary"
             align="center"
-            sx={{ maxWidth: '75%', margin: 'auto' }}
+            sx={{ maxWidth: '90%', margin: 'auto' }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            libero dui, euismod sodales metus laoreet, blandit tincidunt leo.
-            Praesent eu risus accumsan, condimentum tellus ut, dictum felis.
+            This project demonstrates a full-stack web application built using
+            React, Node.js, Express, MongoDB, Redux, Material UI, and
+            TypeScript. It features user authentication, survey creation,
+            response collection, and results visualization. Feel free to explore
+            the available surveys or create an account to test the creation
+            features.
           </Typography>
         </Container>
       </Paper>
@@ -59,7 +62,7 @@ const HomePage = () => {
             variant="contained"
             startIcon={<Add />}
             component={RouterLink}
-            to={'/createsurvey'}
+            to={'/survey/create'}
           >
             Create Survey
           </Button>

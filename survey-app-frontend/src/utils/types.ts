@@ -20,9 +20,15 @@ export interface IQuestion {
 
 export interface IAnswer {
   answerText: string;
-  timesAnswerd: number;
+  timesAnswerd?: number;
 }
 export interface AnswerSelection {
   questionsIndex: number;
   answersIndex: number;
+}
+
+export interface NewSurveyEntry {
+  title: string;
+  description: string;
+  questions: IQuestion[];
 }
