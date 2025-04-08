@@ -1,11 +1,31 @@
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import { AnswerSelection, NewSurveyEntry } from '../utils/types';
+
 const baseUrl = 'http://localhost:3000/api/survey';
 
 let token: string | null = null;
 
 const setToken = (newToken: string) => {
   token = `Bearer ${newToken}`;
+};
+
+export const isTokenExpired = (): boolean => {
+  if (!token) return true;
+  try {
+    const decodedToken = jwtDecode(token);
+    const currentTime = Math.floor(Date.now() / 1000);
+    // TODO replace console.log
+    if (decodedToken.exp && decodedToken.exp < currentTime + 15) {
+      console.log('Token has expired');
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log('Error decoding token:', error);
+    return true;
+  }
 };
 
 const getAllSurveys = async () => {
@@ -49,6 +69,7 @@ const deleteSurvey = async (id: string) => {
 
 export default {
   setToken,
+  isTokenExpired,
   getAllSurveys,
   createNewSurvey,
   submitAnswers,

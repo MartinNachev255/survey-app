@@ -54,6 +54,7 @@ const RegisterForm = () => {
       dispatch(setUser(user));
       navigate('/');
     } catch (exception) {
+      //TODO replace console.log
       console.log(exception);
     }
   };
@@ -80,6 +81,7 @@ const RegisterForm = () => {
           variant="outlined"
           fullWidth
           margin="normal"
+          required
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           autoComplete="username"
@@ -89,6 +91,7 @@ const RegisterForm = () => {
           variant="outlined"
           fullWidth
           margin="normal"
+          required
           value={name}
           onChange={(e) => setName(e.target.value)}
           autoComplete="username"
@@ -99,6 +102,7 @@ const RegisterForm = () => {
           variant="outlined"
           fullWidth
           margin="normal"
+          required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           autoComplete="current-password"

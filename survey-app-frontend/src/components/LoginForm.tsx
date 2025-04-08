@@ -51,6 +51,7 @@ const LoginForm = () => {
       dispatch(setUser(user));
       navigate('/');
     } catch (exception) {
+      //TODO replace
       console.log(exception);
     }
   };

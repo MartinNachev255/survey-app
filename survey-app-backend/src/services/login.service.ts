@@ -23,7 +23,7 @@ const loginUser = async (user: LoginUser, next: NextFunction) => {
       id: userToLogin._id,
     };
 
-    const token = jwt.sign(userForToken, SECRET, { expiresIn: 60 * 60 });
+    const token = jwt.sign(userForToken, SECRET, { expiresIn: '2h' });
 
     return { token, username: userToLogin.username, name: userToLogin.name };
   } catch (error) {

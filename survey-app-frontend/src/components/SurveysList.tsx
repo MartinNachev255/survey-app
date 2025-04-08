@@ -41,7 +41,7 @@ const SurveyList = () => {
         }}
       >
         <Typography
-          variant="h5"
+          variant="h6"
           component="h2"
           gutterBottom
           align="center"
@@ -90,21 +90,33 @@ const SurveyList = () => {
                     }}
                   >
                     <Box>
-                      <Typography
-                        variant="h6"
-                        color="text.primary"
-                        sx={{
-                          display: 'block',
-                          mb: 1,
-                          fontWeight: 'medium',
-                        }}
-                      >
-                        {survey.title}
-                        <Typography variant="subtitle2" color="text.secondary">
-                          author: {survey.author}
-                        </Typography>
-                      </Typography>
-
+                      <Stack direction="column">
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 0.5,
+                          }}
+                        >
+                          <Typography
+                            variant="h6"
+                            color="text.primary"
+                            sx={{
+                              display: 'block',
+                              mb: 0,
+                              fontWeight: 'medium',
+                            }}
+                          >
+                            {survey.title}
+                          </Typography>
+                          <Typography
+                            variant="subtitle2"
+                            color="text.secondary"
+                          >
+                            {survey.author ? `by ${survey.author}` : null}
+                          </Typography>
+                        </Box>
+                      </Stack>
                       <Typography
                         variant="body2"
                         color="text.secondary"
