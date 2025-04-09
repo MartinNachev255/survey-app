@@ -1,7 +1,7 @@
 import winston, { format, transports } from 'winston';
 import path from 'path';
-
 import DailyRotateFile from 'winston-daily-rotate-file';
+import { StreamOptions } from 'morgan';
 
 const logDir = path.join(process.cwd(), '../logs/');
 
@@ -60,7 +60,7 @@ const loggerTransports: winston.transport[] = [
   }),
 
   new DailyRotateFile({
-    level: 'info',
+    level: 'http',
     dirname: logDir,
     filename: 'app-%DATE%.log',
     datePattern: 'DD-MM-YYYY',
@@ -78,5 +78,11 @@ const logger = winston.createLogger({
   transports: loggerTransports,
   exitOnError: false,
 });
+
+export const stream: StreamOptions = {
+  write: (message: string): void => {
+    logger.http(message.trim());
+  },
+};
 
 export default logger;

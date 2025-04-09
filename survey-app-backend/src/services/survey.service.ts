@@ -4,6 +4,7 @@ import { NextFunction } from 'express';
 import { IUser } from '../types/user.types';
 import User from '../modules/User';
 import { CustomError } from '../utils/customError';
+import logger from '../config/logger';
 
 const getAllSurveys = async (next: NextFunction) => {
   try {
@@ -37,12 +38,17 @@ const createNewSurvey = async (
       author: user.name,
     });
 
+    logger.debug(`Attempting to save newSurvey to database`);
     const savedSurvey = await newSurvey.save();
+    logger.debug('Survey saved successfully');
+
+    logger.debug("Attempting to update user's surveys");
     user.surveys = user.surveys.concat(savedSurvey._id);
     User.updateOne(
       { _id: user.id },
       { $push: { surveys: savedSurvey.id } },
     ).exec();
+    logger.debug('Adding survey to user is successful');
 
     return savedSurvey;
   } catch (error) {
