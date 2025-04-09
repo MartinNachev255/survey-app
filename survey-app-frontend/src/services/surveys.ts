@@ -23,7 +23,7 @@ export const isTokenExpired = (): boolean => {
       return false;
     }
   } catch (error) {
-    console.log('Error decoding token:', error);
+    console.error('Error decoding token:', error);
     return true;
   }
 };

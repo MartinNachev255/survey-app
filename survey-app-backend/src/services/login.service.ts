@@ -25,7 +25,7 @@ const loginUser = async (user: LoginUser, next: NextFunction) => {
       logger.debug(
         `Login failed for username: ${user.username} - Invalid credentials`,
       );
-      throw new CustomError('invalid username or password', 400);
+      throw new CustomError('Invalid username or password', 400);
     }
 
     const userForToken = {

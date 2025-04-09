@@ -7,6 +7,7 @@ import {
   Link as MUILink,
   InputAdornment,
   IconButton,
+  Paper,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router';
 import loginService from '../services/login';
@@ -39,8 +40,18 @@ const LoginForm = () => {
     setShowPassword(!showPassword);
   };
 
+  const [invalidCredentialsNotif, setInvalidCredentialsNotif] = useState('');
+
+  const displayInvalidCredentialsNotif = (message: string) => {
+    setInvalidCredentialsNotif(message);
+    setTimeout(() => {
+      setInvalidCredentialsNotif('');
+    }, 5000);
+  };
+
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+
     try {
       const user = await loginService.login({
         username,
@@ -50,9 +61,20 @@ const LoginForm = () => {
       surveyService.setToken(user.token);
       dispatch(setUser(user));
       navigate('/');
-    } catch (exception) {
-      //TODO replace
-      console.log(exception);
+    } catch (exception: unknown) {
+      let errorMessage =
+        exception instanceof Error ? exception.message : 'An error occurred';
+      if (
+        exception &&
+        typeof exception === 'object' &&
+        'response' in exception
+      ) {
+        const axiosError = exception as {
+          response: { data: { message: string } };
+        };
+        errorMessage = axiosError.response.data.message;
+      }
+      displayInvalidCredentialsNotif(errorMessage);
     }
   };
 
@@ -73,6 +95,21 @@ const LoginForm = () => {
         onSubmit={handleLogin}
         sx={{ width: '100%', maxWidth: 400, mt: 1 }}
       >
+        {invalidCredentialsNotif && (
+          <Box>
+            <Paper elevation={1}>
+              <Typography
+                color="error"
+                align="center"
+                sx={{ p: { sx: 1, md: 2, lg: 2 } }}
+                border={'1px solid rgba(255, 0, 0, 0.7)'}
+                borderRadius={2}
+              >
+                {invalidCredentialsNotif}
+              </Typography>
+            </Paper>
+          </Box>
+        )}
         <TextField
           label="Username"
           variant="outlined"

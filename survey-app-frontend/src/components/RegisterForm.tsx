@@ -7,6 +7,7 @@ import {
   Link as MUILink,
   InputAdornment,
   IconButton,
+  Paper,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router';
 import registerService from '../services/register';
@@ -41,9 +42,27 @@ const RegisterForm = () => {
     }
   }, [user, navigate]);
 
+  const [invalidCredentialsNotif, setInvalidCredentialsNotif] = useState('');
+
+  const displayInvalidCredentialsNotif = (message: string) => {
+    setInvalidCredentialsNotif(message);
+    setTimeout(() => {
+      setInvalidCredentialsNotif('');
+    }, 5000);
+  };
+
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
+      if (username.length < 3) {
+        throw new Error('Username has to be atleast 3 characters');
+      }
+      if (password.length < 3) {
+        throw new Error('Password has to be atleast 3 characters');
+      }
+      if (name.length < 3) {
+        throw new Error('Name has to be atleast 3 characters');
+      }
       const user = await registerService.register({
         username,
         name,
@@ -53,9 +72,35 @@ const RegisterForm = () => {
       surveyService.setToken(user.token);
       dispatch(setUser(user));
       navigate('/');
-    } catch (exception) {
-      //TODO replace console.log
-      console.log(exception);
+    } catch (exception: unknown) {
+      let errorMessage =
+        exception instanceof Error ? exception.message : 'An error occurred';
+      if (
+        exception &&
+        typeof exception === 'object' &&
+        'response' in exception
+      ) {
+        const axiosError = exception as {
+          response: {
+            data: {
+              keyValue?: object | undefined;
+              message: string;
+            };
+          };
+        };
+        if (
+          axiosError.response.data.message.includes('Duplicate key') &&
+          axiosError.response.data.keyValue
+        ) {
+          const dublicateKey = Object.keys(
+            axiosError.response.data.keyValue,
+          ).toString();
+          errorMessage = `${dublicateKey} already exists`;
+        } else {
+          errorMessage = axiosError.response.data.message;
+        }
+      }
+      displayInvalidCredentialsNotif(errorMessage);
     }
   };
 
@@ -71,6 +116,21 @@ const RegisterForm = () => {
       <Typography variant="h4" component="h1" gutterBottom>
         Sign up
       </Typography>
+      {invalidCredentialsNotif && (
+        <Box>
+          <Paper elevation={1}>
+            <Typography
+              color="error"
+              align="center"
+              sx={{ p: { sx: 1, md: 2, lg: 2 } }}
+              border={'1px solid rgba(255, 0, 0, 0.7)'}
+              borderRadius={2}
+            >
+              {invalidCredentialsNotif}
+            </Typography>
+          </Paper>
+        </Box>
+      )}
       <Box
         component="form"
         onSubmit={handleLogin}

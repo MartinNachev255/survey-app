@@ -37,7 +37,7 @@ const CreateSurveyForm = () => {
       questions: questions,
     };
     await surveyService.createNewSurvey(newSurvey);
-    console.log('Form Data:', questions);
+    // TODO Add notification for created survey
   };
 
   return (

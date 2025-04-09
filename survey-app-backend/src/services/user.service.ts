@@ -3,6 +3,8 @@ import { NewUserEnrty } from '../types/user.types';
 import User from '../modules/User';
 import { NextFunction } from 'express';
 import logger from '../config/logger';
+import jwt from 'jsonwebtoken';
+import { SECRET } from '../config/env';
 
 const addUser = async (user: NewUserEnrty, next: NextFunction) => {
   try {
@@ -14,11 +16,19 @@ const addUser = async (user: NewUserEnrty, next: NextFunction) => {
       password: passwordHash,
     });
 
-    logger.debug(`Attempting to save ${user} to database`);
+    logger.debug(`Attempting to save ${newUser} to database`);
     const savedUser = await newUser.save();
     logger.debug('User saved successfully');
 
-    return savedUser;
+    const userForToken = {
+      username: savedUser.username,
+      id: savedUser._id,
+    };
+
+    const token = jwt.sign(userForToken, SECRET, { expiresIn: '2h' });
+    logger.info(`User ${user.username} logged in successfully`);
+
+    return { token, username: savedUser.username, name: savedUser.name };
   } catch (error) {
     next(error);
     return;
