@@ -20,7 +20,7 @@ export interface IQuestion {
 
 export interface IAnswer {
   answerText: string;
-  timesAnswerd?: number;
+  timesAnswered?: number;
 }
 export interface AnswerSelection {
   questionsIndex: number;

@@ -51,12 +51,12 @@ const SurveyDetails = () => {
               }}
             >
               {[...question.answers]
-                .sort((a, b) => b.timesAnswerd - a.timesAnswerd)
+                .sort((a, b) => (b.timesAnswered ?? 0) - (a.timesAnswered ?? 0))
                 .map((answer, aIndex) => (
                   <List key={aIndex}>
                     <Typography variant="body1">
-                      {aIndex}. {answer.answerText}: Has been answerd{' '}
-                      {answer.timesAnswerd} times.
+                      {aIndex}. {answer.answerText}: Has been answered{' '}
+                      {answer.timesAnswered} times.
                     </Typography>
                   </List>
                 ))}

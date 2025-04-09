@@ -37,7 +37,7 @@ const CreateSurveyForm = () => {
       questions: questions,
     };
     await surveyService.createNewSurvey(newSurvey);
-    // TODO Add notification for created survey
+    // TODO Add notification for created survey and add navigate to main mage
   };
 
   return (

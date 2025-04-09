@@ -19,7 +19,7 @@ if (NODE_ENV === 'production') {
 
 if (!MONGODB_URI_FROM_ENV) {
   logger.error(
-    'FATAL ERROR: MONGODB_URI is not defined in the enviroment variables',
+    'FATAL ERROR: MONGODB_URI is not defined in the environment variables',
   );
   process.exit(1);
 }
@@ -28,7 +28,7 @@ export const MONGODB_URI: string = MONGODB_URI_FROM_ENV;
 const SECRET_FROM_ENV = process.env.SECRET;
 if (!SECRET_FROM_ENV) {
   logger.error(
-    'FATAL ERROR: SECRET is not defined in the enviroment variables',
+    'FATAL ERROR: SECRET is not defined in the environment variables',
   );
   process.exit(1);
 }

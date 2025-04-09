@@ -109,7 +109,7 @@ const incrementAnswers = async (
         filter: { _id: surveyID },
         update: {
           $inc: {
-            [`questions.${answer.questionsIndex}.answers.${answer.answersIndex}.timesAnswerd`]: 1,
+            [`questions.${answer.questionsIndex}.answers.${answer.answersIndex}.timesAnswered`]: 1,
           },
         },
       },

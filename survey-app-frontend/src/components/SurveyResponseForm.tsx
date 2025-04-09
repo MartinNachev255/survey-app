@@ -57,9 +57,10 @@ const SurveyResponseForm = () => {
 
   interface Result {
     success: boolean;
-    modifiedCntent: number;
+    modifiedContent: number;
   }
 
+  // TODO Fix bug when you spam submit multiple requests are send
   const handleSubmit = async () => {
     if (surveyID) {
       const result: Result = await surveyService.submitAnswers(

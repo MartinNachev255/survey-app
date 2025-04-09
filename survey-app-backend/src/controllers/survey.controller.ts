@@ -6,7 +6,7 @@ import { IUser } from '../types/user.types';
 import { JwtPayload } from 'jsonwebtoken';
 import {
   newSurveyParser,
-  newAnsersEntryParser,
+  newAnswersEntryParser,
 } from '../utils/validationParsers';
 
 const surveyRouter = express.Router();
@@ -96,7 +96,7 @@ surveyRouter.delete(
 surveyRouter.post(
   '/:id/respond',
   userAuth.tokenExtractor,
-  newAnsersEntryParser,
+  newAnswersEntryParser,
   async (req: Request, res: Response, next: NextFunction) => {
     const surveyID = req.params.id;
 

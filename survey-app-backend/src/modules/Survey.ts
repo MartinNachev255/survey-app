@@ -10,7 +10,7 @@ const surveySchema = new Schema<ISurvey>({
       answers: [
         {
           answerText: { type: String, require: true },
-          timesAnswerd: { type: Number, required: true, default: 0 },
+          timesAnswered: { type: Number, required: true, default: 0 },
         },
       ],
     },

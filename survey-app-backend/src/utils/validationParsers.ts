@@ -31,7 +31,7 @@ export const newSurveyParser = (
   }
 };
 
-export const newAnsersEntryParser = (
+export const newAnswersEntryParser = (
   req: Request,
   _res: Response,
   next: NextFunction,

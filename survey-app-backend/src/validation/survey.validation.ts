@@ -11,7 +11,7 @@ export const newSurveyEntrySchema = z.object({
           .array(
             z.object({
               answerText: z.string().min(1, 'Answer text is required'),
-              timesAnswerd: z.number().default(0),
+              timesAnswered: z.number().default(0),
             }),
           )
           .max(5, 'A question can have 4 answers at most'),

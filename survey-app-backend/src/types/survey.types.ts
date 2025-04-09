@@ -15,7 +15,7 @@ export interface IQuestion {
 export interface IAnswer {
   answer: {
     answerText: string;
-    timesAnswerd: number;
+    timesAnswered: number;
   };
 }
 
