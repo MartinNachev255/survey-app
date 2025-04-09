@@ -1,20 +1,11 @@
 import express, { NextFunction } from 'express';
 import User from '../modules/User';
 import { Request, Response } from 'express';
-import { newUserEnrtySchema } from '../validation/user.validation';
 import userServices from '../services/user.service';
 import { NewUserEnrty } from '../types/user.types';
+import { newUserParser } from '../utils/validationParsers';
 
 const userRouter = express.Router();
-
-const newUserParser = (req: Request, _res: Response, next: NextFunction) => {
-  try {
-    newUserEnrtySchema.parse(req.body);
-    next();
-  } catch (error: unknown) {
-    next(error);
-  }
-};
 
 userRouter.post(
   '/',

@@ -3,6 +3,20 @@ import {
   newSurveyEntrySchema,
   newAnswersEntrySchema,
 } from '../validation/survey.validation';
+import { newUserEnrtySchema } from '../validation/user.validation';
+
+export const newUserParser = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  try {
+    newUserEnrtySchema.parse(req.body);
+    next();
+  } catch (error: unknown) {
+    next(error);
+  }
+};
 
 export const newSurveyParser = (
   req: Request,

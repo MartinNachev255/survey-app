@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 import { CustomError } from '../utils/customError';
 import mongoose from 'mongoose';
+import logger from '../config/logger';
 
 const errorHandler = (
   err: Error,
@@ -9,7 +10,7 @@ const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  console.error('Error:', err);
+  logger.error({ err });
 
   if (res.headersSent) {
     return next(err);
