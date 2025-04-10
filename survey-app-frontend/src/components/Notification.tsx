@@ -12,7 +12,13 @@ const Notification = () => {
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
     >
       <Alert
-        severity={message.includes('Error: ') ? 'error' : 'success'}
+        severity={
+          message.includes('Error: ')
+            ? 'error'
+            : message.includes('Warning:')
+              ? 'warning'
+              : 'success'
+        }
         sx={{ width: '100%' }}
         elevation={6}
         variant="filled"

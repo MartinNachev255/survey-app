@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <title>Survey Clipboard Icon (Dark Theme)</title>
+
+  <!-- Clipboard Clip - Light Grey/Blue -->
+  <path d="M40 10 H60 V25 H40 Z" fill="#7F8C8D" />
+  <rect x="32" y="18" width="36" height="8" rx="2" ry="2" fill="#BDC3C7"/>
+
+  <!-- Clipboard Board - Medium Blue -->
+  <rect x="15" y="25" width="70" height="70" rx="5" ry="5" fill="#34495e" stroke="#5DADE2" stroke-width="2"/> <!-- Darker blue fill, Lighter blue stroke -->
+
+  <!-- Paper Area - Very Light Blue/Grey -->
+  <rect x="22" y="32" width="56" height="56" rx="2" ry="2" fill="#ecf0f1"/>
+
+  <!-- Checkboxes Outline & Lines - White -->
+  <rect x="30" y="40" width="12" height="12" rx="2" ry="2" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+  <line x1="50" y1="46" x2="70" y2="46" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+
+  <rect x="30" y="65" width="12" height="12" rx="2" ry="2" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+  <line x1="50" y1="71" x2="70" y2="71" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Checkmark - Bright Cyan/Aqua -->
+  <polyline points="32 45 36 49 43 42" fill="none" stroke="#00FFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

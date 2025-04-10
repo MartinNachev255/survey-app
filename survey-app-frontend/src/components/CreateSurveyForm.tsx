@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TextField,
   Button,
@@ -11,9 +11,11 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import surveyService from '../services/surveys';
-import { IQuestion } from '../utils/types';
+import { IQuestion, IUser } from '../utils/types';
 import { useNavigate } from 'react-router';
 import { useNotification } from '../hooks/useNotification';
+import { useSelector } from 'react-redux';
+import { RootStore } from '../utils/store';
 
 const CreateSurveyForm = () => {
   const navigate = useNavigate();
@@ -45,6 +47,15 @@ const CreateSurveyForm = () => {
     showNotification('Survey successfully created');
     navigate('/');
   };
+
+  const user = useSelector<RootStore, IUser | null>((state) => state.user);
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      showNotification('Warning: Login to create survey');
+    }
+  }, [user, navigate]);
 
   return (
     <Paper
