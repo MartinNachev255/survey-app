@@ -15,9 +15,8 @@ export const isTokenExpired = (): boolean => {
   try {
     const decodedToken = jwtDecode(token);
     const currentTime = Math.floor(Date.now() / 1000);
-    // TODO replace console.log
+
     if (decodedToken.exp && decodedToken.exp < currentTime + 15) {
-      console.log('Token has expired');
       return true;
     } else {
       return false;

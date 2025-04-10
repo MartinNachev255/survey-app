@@ -16,10 +16,12 @@ import { RootStore } from '../utils/store';
 import { useDispatch } from 'react-redux';
 import { clearUser } from '../reducers/userReducer';
 import { Avatar, Tooltip } from '@mui/material';
+import { useNotification } from '../hooks/useNotification';
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { showNotification } = useNotification();
 
   const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
@@ -49,6 +51,7 @@ function ResponsiveAppBar() {
   const logout = () => {
     window.localStorage.removeItem('loggedSurveyAppUser');
     dispatch(clearUser());
+    showNotification('Logged out');
   };
 
   return (
@@ -144,7 +147,7 @@ function ResponsiveAppBar() {
               <Button
                 onClick={() => {
                   handleCloseNavMenu();
-                  navigate(`/createsurvey`);
+                  navigate(`/survey/create`);
                 }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >

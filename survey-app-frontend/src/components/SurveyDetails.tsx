@@ -22,9 +22,7 @@ const SurveyDetails = () => {
   const surveys = useSelector<RootStore, ISurvey[]>((state) => state.surveys);
 
   useEffect(() => {
-    if (surveys.length === 0) {
-      dispatch(initializeSurveys());
-    }
+    dispatch(initializeSurveys());
   }, [dispatch, surveys.length]);
 
   const survey = surveys.find((s) => s.id === surveyID);

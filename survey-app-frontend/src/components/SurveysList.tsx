@@ -19,10 +19,12 @@ import { AppDispatch, RootStore } from '../utils/store';
 import { ISurvey, IUser } from '../utils/types';
 import { Link as RouterLink } from 'react-router';
 import surveyService from '../services/surveys';
+import { useNotification } from '../hooks/useNotification';
 
 const SurveyList = () => {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
+  const { showNotification } = useNotification();
 
   const [filter, setFilter] = useState('');
 
@@ -38,6 +40,7 @@ const SurveyList = () => {
     if (confirm('Are you sure you want to delete the survey?')) {
       await surveyService.deleteSurvey(surveyID);
       dispatch(removeSurvey(surveyID));
+      showNotification('Survey deleted');
     }
   };
 

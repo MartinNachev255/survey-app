@@ -7,9 +7,12 @@ import { RootStore } from './utils/store';
 import { IUser } from './utils/types';
 import { isTokenExpired } from './services/surveys';
 import { clearUser } from './reducers/userReducer';
+import Notification from './components/Notification';
+import { useNotification } from './hooks/useNotification';
 
 const App = () => {
   const dispatch = useDispatch();
+  const { showNotification } = useNotification();
 
   const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
@@ -18,6 +21,7 @@ const App = () => {
       loginUserFromLocalStorage(dispatch);
     } else {
       if (isTokenExpired()) {
+        showNotification('Session expired');
         dispatch(clearUser());
         window.localStorage.removeItem('loggedSurveyAppUser');
       }
@@ -28,6 +32,7 @@ const App = () => {
     <div>
       <ResponsiveAppBar />
       <RoutesComponent />
+      <Notification />
     </div>
   );
 };

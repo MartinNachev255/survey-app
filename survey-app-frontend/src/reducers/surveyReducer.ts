@@ -14,13 +14,20 @@ const surveySlice = createSlice({
     appendSurvey(state, action) {
       state.push(action.payload);
     },
+    updateSurvey(state, action) {
+      const updatedSurvey = action.payload;
+      return state.map((survey) =>
+        survey.id === updatedSurvey.id ? updatedSurvey : survey,
+      );
+    },
     removeSurvey(state, action) {
       return state.filter((survey) => survey.id !== action.payload);
     },
   },
 });
 
-export const { setSurveys, appendSurvey, removeSurvey } = surveySlice.actions;
+export const { setSurveys, appendSurvey, removeSurvey, updateSurvey } =
+  surveySlice.actions;
 
 export const initializeSurveys = () => {
   return async (dispatch: Dispatch) => {

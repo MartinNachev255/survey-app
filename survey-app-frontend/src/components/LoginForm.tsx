@@ -18,10 +18,12 @@ import { useNavigate } from 'react-router';
 import { IUser } from '../utils/types';
 import { RootStore } from '../utils/store';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { useNotification } from '../hooks/useNotification';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -61,6 +63,7 @@ const LoginForm = () => {
       surveyService.setToken(user.token);
       dispatch(setUser(user));
       navigate('/');
+      showNotification('Successfully logged in');
     } catch (exception: unknown) {
       let errorMessage =
         exception instanceof Error ? exception.message : 'An error occurred';

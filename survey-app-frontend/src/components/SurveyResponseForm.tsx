@@ -18,10 +18,12 @@ import { useEffect, useState } from 'react';
 import surveyService from '../services/surveys';
 import { useDispatch } from 'react-redux';
 import { initializeSurveys } from '../reducers/surveyReducer';
+import { useNotification } from '../hooks/useNotification';
 
 const SurveyResponseForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const { showNotification } = useNotification();
 
   const surveyID = useParams().id;
   const surveys = useSelector<RootStore, ISurvey[]>((state) => state.surveys);
@@ -78,15 +80,15 @@ const SurveyResponseForm = () => {
           selectedAnswers,
         );
         if (result) {
-          // TODO Replace console.log with notification
-          console.log('Result:', result.success);
+          showNotification('Survey successfully submitted');
           navigate(`/survey/${surveyID}/stats`);
         } else {
           setIsSubmitting(false);
         }
       } catch (error) {
-        console.error('Submission failed:', error);
-        // TODO: Show error notification to the user
+        showNotification(
+          `Error: ${error instanceof Error ? error.message : String(error)}`,
+        );
         setIsSubmitting(false);
       }
     }
