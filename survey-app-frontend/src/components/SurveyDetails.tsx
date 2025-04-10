@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { RootStore } from '../utils/store';
+import { AppDispatch, RootStore } from '../utils/store';
 import { ISurvey } from '../utils/types';
 import { useNavigate, useParams } from 'react-router';
 import {
@@ -10,12 +10,22 @@ import {
   List,
   Typography,
 } from '@mui/material';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { initializeSurveys } from '../reducers/surveyReducer';
 
 const SurveyDetails = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const surveyID = useParams().id;
   const surveys = useSelector<RootStore, ISurvey[]>((state) => state.surveys);
+
+  useEffect(() => {
+    if (surveys.length === 0) {
+      dispatch(initializeSurveys());
+    }
+  }, [dispatch, surveys.length]);
 
   const survey = surveys.find((s) => s.id === surveyID);
 

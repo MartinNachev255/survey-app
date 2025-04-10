@@ -12,8 +12,11 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import surveyService from '../services/surveys';
 import { IQuestion } from '../utils/types';
+import { useNavigate } from 'react-router';
 
 const CreateSurveyForm = () => {
+  const navigate = useNavigate();
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [title, setTitle] = useState('');
@@ -37,6 +40,7 @@ const CreateSurveyForm = () => {
       questions: questions,
     };
     await surveyService.createNewSurvey(newSurvey);
+    navigate('/');
     // TODO Add notification for created survey and add navigate to main mage
   };
 

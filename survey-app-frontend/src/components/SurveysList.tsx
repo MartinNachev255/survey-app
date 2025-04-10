@@ -14,10 +14,11 @@ import {
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { initializeSurveys } from '../reducers/surveyReducer';
+import { initializeSurveys, removeSurvey } from '../reducers/surveyReducer';
 import { AppDispatch, RootStore } from '../utils/store';
 import { ISurvey, IUser } from '../utils/types';
 import { Link as RouterLink } from 'react-router';
+import surveyService from '../services/surveys';
 
 const SurveyList = () => {
   const theme = useTheme();
@@ -32,6 +33,13 @@ const SurveyList = () => {
   }, [dispatch]);
 
   const surveys = useSelector<RootStore, ISurvey[]>((state) => state.surveys);
+
+  const handleDelete = async (surveyID: string) => {
+    if (confirm('Are you sure you want to delete the survey?')) {
+      await surveyService.deleteSurvey(surveyID);
+      dispatch(removeSurvey(surveyID));
+    }
+  };
 
   return (
     <Container maxWidth="md" sx={{ mb: 6, mt: 5 }}>
@@ -134,6 +142,17 @@ const SurveyList = () => {
                       </Typography>
                     </Box>
                     <Box sx={{ position: 'absolute', bottom: 16, right: 16 }}>
+                      {survey.author === user?.name && (
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          color="error"
+                          sx={{ mr: 1 }}
+                          onClick={() => handleDelete(survey.id)}
+                        >
+                          Delete
+                        </Button>
+                      )}
                       <Button
                         variant="outlined"
                         size="small"

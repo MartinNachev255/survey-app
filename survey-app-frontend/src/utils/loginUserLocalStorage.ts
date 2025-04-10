@@ -1,5 +1,5 @@
 import { setUser } from '../reducers/userReducer';
-import surveyServices from '../services/surveys';
+import surveyService from '../services/surveys';
 import { Dispatch } from '@reduxjs/toolkit';
 
 export const loginUserFromLocalStorage = (dispatch: Dispatch) => {
@@ -7,7 +7,7 @@ export const loginUserFromLocalStorage = (dispatch: Dispatch) => {
   if (loggedUserJson) {
     const user = JSON.parse(loggedUserJson);
     dispatch(setUser(user));
-    surveyServices.setToken(user.token);
+    surveyService.setToken(user.token);
   }
 };
 

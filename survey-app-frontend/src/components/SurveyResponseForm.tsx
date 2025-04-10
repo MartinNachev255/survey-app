@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { RootStore } from '../utils/store';
+import { AppDispatch, RootStore } from '../utils/store';
 import { AnswerSelection, ISurvey } from '../utils/types';
 import { useNavigate, useParams } from 'react-router';
 import {
@@ -14,18 +14,28 @@ import {
   RadioGroup,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import surveyService from '../services/surveys';
+import { useDispatch } from 'react-redux';
+import { initializeSurveys } from '../reducers/surveyReducer';
 
 const SurveyResponseForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const surveyID = useParams().id;
   const surveys = useSelector<RootStore, ISurvey[]>((state) => state.surveys);
 
+  useEffect(() => {
+    if (surveys.length === 0) {
+      dispatch(initializeSurveys());
+    }
+  }, [dispatch, surveys.length]);
+
   const survey = surveys.find((s) => s.id === surveyID);
 
   const [selectedAnswers, setSelectedAnswers] = useState<AnswerSelection[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Add state for submission status
 
   const handleRadioChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -59,20 +69,25 @@ const SurveyResponseForm = () => {
     success: boolean;
     modifiedContent: number;
   }
-
-  // TODO Fix bug when you spam submit multiple requests are send
   const handleSubmit = async () => {
-    if (surveyID) {
-      const result: Result = await surveyService.submitAnswers(
-        surveyID,
-        selectedAnswers,
-      );
-      if (result) {
-        // TODO Replace console.log with notification
-        console.log('Result:', result.success);
-        setTimeout(() => {
+    if (surveyID && !isSubmitting) {
+      setIsSubmitting(true);
+      try {
+        const result: Result = await surveyService.submitAnswers(
+          surveyID,
+          selectedAnswers,
+        );
+        if (result) {
+          // TODO Replace console.log with notification
+          console.log('Result:', result.success);
           navigate(`/survey/${surveyID}/stats`);
-        }, 1000);
+        } else {
+          setIsSubmitting(false);
+        }
+      } catch (error) {
+        console.error('Submission failed:', error);
+        // TODO: Show error notification to the user
+        setIsSubmitting(false);
       }
     }
   };
@@ -132,16 +147,6 @@ const SurveyResponseForm = () => {
             </Box>
           </List>
         ))}
-        {/* <Box
-          display="flex"
-          justifyContent="flex-end"
-          mt={4}
-          pr={{ xs: 5, sm: 8, md: '14vh', lg: '25vh' }}
-        >
-          <Button variant="contained" onClick={handleSubmit}>
-            Submit
-          </Button>
-        </Box> */}
         <Box
           display="flex"
           justifyContent="space-between"
@@ -152,8 +157,12 @@ const SurveyResponseForm = () => {
           <Button variant="contained" onClick={() => navigate('/')}>
             Back
           </Button>
-          <Button variant="contained" onClick={handleSubmit}>
-            Submit
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </Button>
         </Box>
       </Box>

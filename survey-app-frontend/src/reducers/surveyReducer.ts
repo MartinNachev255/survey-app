@@ -1,5 +1,5 @@
 import { createSlice, Dispatch } from '@reduxjs/toolkit';
-import surveyServices from '../services/surveys';
+import surveyService from '../services/surveys';
 import { ISurvey } from '../utils/types';
 
 const initialState: ISurvey[] = [];
@@ -11,14 +11,20 @@ const surveySlice = createSlice({
     setSurveys(_state, action) {
       return action.payload;
     },
+    appendSurvey(state, action) {
+      state.push(action.payload);
+    },
+    removeSurvey(state, action) {
+      return state.filter((survey) => survey.id !== action.payload);
+    },
   },
 });
 
-export const { setSurveys } = surveySlice.actions;
+export const { setSurveys, appendSurvey, removeSurvey } = surveySlice.actions;
 
 export const initializeSurveys = () => {
   return async (dispatch: Dispatch) => {
-    const surveys = await surveyServices.getAllSurveys();
+    const surveys = await surveyService.getAllSurveys();
     dispatch(setSurveys(surveys));
   };
 };
