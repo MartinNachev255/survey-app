@@ -109,7 +109,7 @@ const SurveyResponseForm = () => {
         </Typography>
       </Box>
       <Divider />
-      <Box my={1}>
+      <Box mt={1} mb={8}>
         {survey?.questions.map((question, qIndex) => (
           <List key={qIndex}>
             <Typography

@@ -63,7 +63,7 @@ const SurveyDetails = () => {
                 .map((answer, aIndex) => (
                   <List key={aIndex}>
                     <Typography variant="body1">
-                      {aIndex}. {answer.answerText}: Has been answered{' '}
+                      {aIndex + 1}. {answer.answerText}: Has been answered{' '}
                       {answer.timesAnswered} times.
                     </Typography>
                   </List>
