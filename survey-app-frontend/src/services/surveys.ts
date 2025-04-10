@@ -2,7 +2,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { AnswerSelection, NewSurveyEntry } from '../utils/types';
 
-const baseUrl = 'http://localhost:3000/api/survey';
+const baseUrl = '/api/survey';
 
 let token: string | null = null;
 

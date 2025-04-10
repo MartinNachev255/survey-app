@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3000/api/users';
+const baseUrl = '/api/users';
 
 interface Credentials {
   username: string;

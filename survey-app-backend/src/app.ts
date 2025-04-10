@@ -10,16 +10,13 @@ import { stream } from './config/logger';
 
 const app = express();
 
+app.use(express.static('dist'))
 app.use(cors());
 app.use(express.json());
 
 app.use(morgan('combined', { stream }));
 
 connectDB();
-
-app.get('/', (_req, res) => {
-  res.send('works');
-});
 
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
