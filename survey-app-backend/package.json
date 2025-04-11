@@ -10,7 +10,7 @@
     "tsc": "tsc",
     "start": "cross-env NODE_ENV=production tsx index.ts",
     "dev": "cross-env NODE_ENV=development tsx index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_ENV=test tsx --test **/*.test.ts",
     "lint": "eslint ."
   },
   "devDependencies": {
@@ -24,6 +24,7 @@
     "@types/morgan": "^1.9.9",
     "eslint": "^9.22.0",
     "prettier": "^3.5.3",
+    "supertest": "^7.1.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1"

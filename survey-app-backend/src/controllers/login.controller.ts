@@ -23,7 +23,7 @@ loginRouter.post(
     next: NextFunction,
   ) => {
     try {
-      const userToLogin = await loginServices.loginUser(req.body, next);
+      const userToLogin = await loginServices.loginUser(req.body);
       if (userToLogin) {
         res.status(200).json(userToLogin);
       }

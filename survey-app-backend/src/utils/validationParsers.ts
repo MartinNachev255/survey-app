@@ -3,7 +3,7 @@ import {
   newSurveyEntrySchema,
   newAnswersEntrySchema,
 } from '../validation/survey.validation';
-import { newUserEnrtySchema } from '../validation/user.validation';
+import { newUserEntrySchema } from '../validation/user.validation';
 
 export const newUserParser = (
   req: Request,
@@ -11,7 +11,7 @@ export const newUserParser = (
   next: NextFunction,
 ) => {
   try {
-    newUserEnrtySchema.parse(req.body);
+    newUserEntrySchema.parse(req.body);
     next();
   } catch (error: unknown) {
     next(error);

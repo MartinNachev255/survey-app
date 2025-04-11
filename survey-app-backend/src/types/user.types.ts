@@ -6,6 +6,8 @@ export interface IUser {
   id: string;
 }
 
-export type NewUserEnrty = Omit<IUser, 'id'>;
+export type NewUserEntry = Omit<IUser, 'id' | 'surveys'>;
+
+export type NewUserEntryNoPass = Omit<NewUserEntry, 'password'>;
 
 export type LoginUser = Omit<IUser, 'name' | 'id'>;

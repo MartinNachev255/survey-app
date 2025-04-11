@@ -20,16 +20,24 @@ interface CustomRequest extends Request {
 surveyRouter.get(
   '/',
   async (_req: Request, res: Response<ISurvey[]>, next: NextFunction) => {
-    const surveys = await surveyService.getAllSurveys(next);
-    if (surveys) res.status(200).json(surveys);
+    try {
+      const surveys = await surveyService.getAllSurveys();
+      if (surveys) res.status(200).json(surveys);
+    } catch (error) {
+      next(error);
+    }
   },
 );
 
 surveyRouter.get(
   '/:id',
   async (req: Request, res: Response<ISurvey>, next: NextFunction) => {
-    const survey = await surveyService.getSurveyById(req.params.id, next);
-    if (survey) res.status(200).json(survey);
+    try {
+      const survey = await surveyService.getSurveyById(req.params.id);
+      if (survey) res.status(200).json(survey);
+    } catch (error) {
+      next(error);
+    }
   },
 );
 
@@ -43,12 +51,15 @@ surveyRouter.post(
     res: Response<NewSurveyEntry>,
     next: NextFunction,
   ) => {
-    const addedSurvey = await surveyService.createNewSurvey(
-      req.body,
-      (req as CustomRequest).user as IUser,
-      next,
-    );
-    res.status(200).json(addedSurvey);
+    try {
+      const addedSurvey = await surveyService.createNewSurvey(
+        req.body,
+        (req as CustomRequest).user as IUser,
+      );
+      res.status(200).json(addedSurvey);
+    } catch (error) {
+      next(error);
+    }
   },
 );
 
@@ -62,18 +73,21 @@ surveyRouter.put(
     res: Response,
     next: NextFunction,
   ) => {
-    const updatedSurvey = await surveyService.updateSurvey(
-      req.params.id,
-      req.body,
-      (req as unknown as CustomRequest).user as IUser,
-      next,
-    );
+    try {
+      const updatedSurvey = await surveyService.updateSurvey(
+        req.params.id,
+        req.body,
+        (req as unknown as CustomRequest).user as IUser,
+      );
 
-    if (updatedSurvey) {
-      res.status(200).json({
-        success: true,
-        updatedSurveyID: updatedSurvey?.id,
-      });
+      if (updatedSurvey) {
+        res.status(200).json({
+          success: true,
+          updatedSurveyID: updatedSurvey?.id,
+        });
+      }
+    } catch (error) {
+      next(error);
     }
   },
 );
@@ -83,13 +97,16 @@ surveyRouter.delete(
   userAuth.tokenExtractor,
   userAuth.userExtractor,
   async (req: Request, res: Response, next: NextFunction) => {
-    const surveyIsDeleted = await surveyService.deleteSurvey(
-      req.params.id,
-      (req as CustomRequest).user as IUser,
-      next,
-    );
+    try {
+      const surveyIsDeleted = await surveyService.deleteSurvey(
+        req.params.id,
+        (req as CustomRequest).user as IUser,
+      );
 
-    if (surveyIsDeleted) res.status(204).end();
+      if (surveyIsDeleted) res.status(204).end();
+    } catch (error) {
+      next(error);
+    }
   },
 );
 
@@ -98,18 +115,21 @@ surveyRouter.post(
   userAuth.tokenExtractor,
   newAnswersEntryParser,
   async (req: Request, res: Response, next: NextFunction) => {
-    const surveyID = req.params.id;
+    try {
+      const surveyID = req.params.id;
 
-    const updatedAnswers = await surveyService.incrementAnswers(
-      surveyID,
-      req.body,
-      next,
-    );
+      const updatedAnswers = await surveyService.incrementAnswers(
+        surveyID,
+        req.body,
+      );
 
-    res.status(200).json({
-      success: true,
-      modifiedContent: updatedAnswers?.modifiedCount,
-    });
+      res.status(200).json({
+        success: true,
+        modifiedContent: updatedAnswers?.modifiedCount,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 );
 
