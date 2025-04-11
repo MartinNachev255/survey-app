@@ -1,0 +1,33 @@
+{
+  "title": "Feedback",
+  "questions": [
+    {
+      "question": "How was your experience?",
+      "answers": [
+        {
+          "answerText": "Great"
+        },
+        {
+          "answerText": "Bad"
+        }
+      ]
+    },
+    {
+      "question": "How old are you?",
+      "answers": [
+        {
+          "answerText": "5-10"
+        },
+        {
+          "answerText": "10-15"
+        },
+        {
+          "answerText": "15-20"
+        },
+        {
+          "answerText": "20+"
+        }
+      ]
+    }
+  ]
+}
