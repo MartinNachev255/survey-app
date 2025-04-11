@@ -1,33 +1,67 @@
-{
-  "title": "Feedback",
-  "questions": [
-    {
-      "question": "How was your experience?",
-      "answers": [
-        {
-          "answerText": "Great"
-        },
-        {
-          "answerText": "Bad"
-        }
-      ]
-    },
-    {
-      "question": "How old are you?",
-      "answers": [
-        {
-          "answerText": "5-10"
-        },
-        {
-          "answerText": "10-15"
-        },
-        {
-          "answerText": "15-20"
-        },
-        {
-          "answerText": "20+"
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "title": "Customer Service Feedback",
+    "description": "Tell us about your recent support interaction.",
+    "questions": [
+      {
+        "question": "How satisfied were you with the support agent?",
+        "answers": [
+          { "answerText": "Very Satisfied" },
+          { "answerText": "Satisfied" },
+          { "answerText": "Neutral" },
+          { "answerText": "Unsatisfied" }
+        ]
+      },
+      {
+        "question": "Was your issue resolved in the first contact?",
+        "answers": [
+          { "answerText": "Yes" },
+          { "answerText": "No" },
+          { "answerText": "Partially" }
+        ]
+      },
+      {
+        "question": "How long did you wait for support?",
+        "answers": [
+          { "answerText": "< 5 minutes" },
+          { "answerText": "5-15 minutes" },
+          { "answerText": "15-30 minutes" },
+          { "answerText": "> 30 minutes" }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Product Satisfaction Survey",
+    "description": "Let us know how you feel about our latest product.",
+    "questions": [
+      {
+        "question": "How easy was the product setup?",
+        "answers": [
+          { "answerText": "Very Easy" },
+          { "answerText": "Somewhat Easy" },
+          { "answerText": "Slightly Difficult" },
+          { "answerText": "Very Difficult" }
+        ]
+      },
+      {
+        "question": "How often do you use the product?",
+        "answers": [
+          { "answerText": "Daily" },
+          { "answerText": "Weekly" },
+          { "answerText": "Monthly" },
+          { "answerText": "Rarely" }
+        ]
+      },
+      {
+        "question": "Overall, how satisfied are you with the product?",
+        "answers": [
+          { "answerText": "Very Satisfied" },
+          { "answerText": "Satisfied" },
+          { "answerText": "Neutral" },
+          { "answerText": "Dissatisfied" }
+        ]
+      }
+    ]
+  }
+]

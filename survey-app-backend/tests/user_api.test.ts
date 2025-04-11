@@ -1,4 +1,4 @@
-import { describe, test, afterAll, beforeEach, expect } from '@jest/globals'; // Use Jest imports
+import { describe, test, afterAll, beforeEach, expect } from '@jest/globals';
 import supertest from 'supertest';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
