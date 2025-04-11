@@ -36,6 +36,7 @@ const RegisterForm = () => {
 
   const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
+  // Redirect to homepage if user is already logged in
   useEffect(() => {
     if (user) {
       navigate('/');
@@ -55,13 +56,13 @@ const RegisterForm = () => {
     event.preventDefault();
     try {
       if (username.length < 3) {
-        throw new Error('Username has to be atleast 3 characters');
+        throw new Error('Username has to be at least 3 characters');
       }
       if (password.length < 3) {
-        throw new Error('Password has to be atleast 3 characters');
+        throw new Error('Password has to be at least 3 characters');
       }
       if (name.length < 3) {
-        throw new Error('Name has to be atleast 3 characters');
+        throw new Error('Name has to be at least 3 characters');
       }
       const user = await registerService.register({
         username,
@@ -92,10 +93,11 @@ const RegisterForm = () => {
           axiosError.response.data.message.includes('Duplicate key') &&
           axiosError.response.data.keyValue
         ) {
-          const dublicateKey = Object.keys(
+          // Check for specific MongoDB duplicate key error and extract the field name
+          const duplicateKey = Object.keys(
             axiosError.response.data.keyValue,
           ).toString();
-          errorMessage = `${dublicateKey} already exists`;
+          errorMessage = `${duplicateKey} already exists`;
         } else {
           errorMessage = axiosError.response.data.message;
         }

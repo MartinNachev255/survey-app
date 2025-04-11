@@ -25,6 +25,9 @@ const CreateSurveyForm = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+  // The questions represent an array of objects that 
+  // holds the text of the question and an array for the answers
   const [questions, setQuestions] = useState<IQuestion[]>([
     {
       question: '',
@@ -38,18 +41,22 @@ const CreateSurveyForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const newSurvey = {
       title: title,
       description: description,
       questions: questions,
     };
+
     await surveyService.createNewSurvey(newSurvey);
+
     showNotification('Survey successfully created');
     navigate('/');
   };
 
   const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
+  // Checks if user is logged in 
   useEffect(() => {
     if (!user) {
       navigate('/login');
@@ -114,6 +121,7 @@ const CreateSurveyForm = () => {
           margin="normal"
         />
 
+        {/*/ Displays input fields based on the length of the question array  */}
         {questions.map((question, index) => (
           <Paper
             key={index}
@@ -135,6 +143,7 @@ const CreateSurveyForm = () => {
                 value={question.question}
                 required
                 fullWidth
+                // Adds an additional empty question to the array
                 onChange={(e) => {
                   const newQuestions = [...questions];
                   newQuestions[index].question = e.target.value;
@@ -182,6 +191,7 @@ const CreateSurveyForm = () => {
               </Button>
             </Box>
 
+            {/*  Displays input fields based on the length of the answers array  */}
             {question.answers.map((answer, aIndex) => (
               <Paper
                 key={aIndex}
@@ -203,10 +213,10 @@ const CreateSurveyForm = () => {
                   required
                   fullWidth
                   sx={{ maxWidth: { xs: '100%', sm: '50%' } }}
+                  // Adds an additional answer to the array
                   onChange={(e) => {
                     const newQuestions = [...questions];
-                    newQuestions[index].answers[aIndex].answerText =
-                      e.target.value;
+                    newQuestions[index].answers[aIndex].answerText = e.target.value;
                     setQuestions(newQuestions);
                   }}
                 />

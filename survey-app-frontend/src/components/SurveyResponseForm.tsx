@@ -36,8 +36,10 @@ const SurveyResponseForm = () => {
 
   const survey = surveys.find((s) => s.id === surveyID);
 
+  // State to track selected answers: [{ questionIndex, answerIndex }, ...]
   const [selectedAnswers, setSelectedAnswers] = useState<AnswerSelection[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Add state for submission status
+  // State to prevent double submissions while API call is in progress
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRadioChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -129,6 +131,7 @@ const SurveyResponseForm = () => {
                 <RadioGroup
                   aria-label={`question-${qIndex}`}
                   name={`radio-buttons-group-${qIndex}`}
+                  // Find the selected answer index for this question, default to '' if none
                   value={
                     selectedAnswers.find(
                       (entry) => entry.questionsIndex === qIndex,

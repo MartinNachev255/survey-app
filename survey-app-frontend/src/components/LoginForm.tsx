@@ -28,8 +28,10 @@ const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  // Retrieve current user state from the Redux store
   const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
+  // Redirect to homepage if user is already logged in
   useEffect(() => {
     if (user) {
       navigate('/');
@@ -42,6 +44,7 @@ const LoginForm = () => {
     setShowPassword(!showPassword);
   };
 
+  // State and handler for displaying temporary login error messages within the form
   const [invalidCredentialsNotif, setInvalidCredentialsNotif] = useState('');
 
   const displayInvalidCredentialsNotif = (message: string) => {
@@ -67,6 +70,7 @@ const LoginForm = () => {
     } catch (exception: unknown) {
       let errorMessage =
         exception instanceof Error ? exception.message : 'An error occurred';
+      // Attempt to extract specific error message from Axios response data
       if (
         exception &&
         typeof exception === 'object' &&
@@ -145,6 +149,7 @@ const LoginForm = () => {
         />
         <Box display="flex" justifyContent="center" width="100%">
           <MUILink
+            // Use React Router for navigation
             component={RouterLink}
             underline="hover"
             to={'/register'}

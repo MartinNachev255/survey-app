@@ -76,7 +76,7 @@ const SurveyList = () => {
           }}
         />
         <Divider sx={{ mb: 3 }} />
-        {surveys.length > 0 ? (
+        {Array.isArray(surveys) && surveys.length > 0 ? (
           <Stack spacing={3} sx={{}}>
             {surveys
               .filter((survey) =>
@@ -145,6 +145,7 @@ const SurveyList = () => {
                       </Typography>
                     </Box>
                     <Box sx={{ position: 'absolute', bottom: 16, right: 16 }}>
+                      {/* Show delete button only if the logged-in user is the author */}
                       {survey.author === user?.name && (
                         <Button
                           variant="outlined"
@@ -165,6 +166,7 @@ const SurveyList = () => {
                       >
                         View
                       </Button>
+                      {/* Disable button and show tooltip if user is not logged in */}
                       <Tooltip title={!user ? 'Login to take survey' : ''}>
                         <RouterLink
                           to={`/survey/${survey.id}`}

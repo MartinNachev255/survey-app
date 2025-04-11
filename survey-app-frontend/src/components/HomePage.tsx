@@ -16,6 +16,7 @@ import { Link as RouterLink } from 'react-router';
 const HomePage = () => {
   const theme = useTheme();
 
+  // Retrieve current user state from the Redux store
   const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
   return (
@@ -61,6 +62,7 @@ const HomePage = () => {
           <Button
             variant="contained"
             startIcon={<Add />}
+            // Use React Router for navigation
             component={RouterLink}
             to={'/survey/create'}
           >
