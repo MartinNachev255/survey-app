@@ -11,7 +11,8 @@
     "start": "cross-env NODE_ENV=production tsx index.ts",
     "dev": "cross-env NODE_ENV=development tsx index.ts",
     "test": "cross-env NODE_ENV=test jest --runInBand",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prettier": "prettier . --write"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

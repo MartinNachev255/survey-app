@@ -2,7 +2,7 @@ import mongoose, { Schema, model } from 'mongoose';
 import { ISurvey } from '../types/survey.types';
 
 const surveySchema = new Schema<ISurvey>({
-  title: { type: String, required: true, unique: true },
+  title: { type: String, required: true, unique: true, minlength: 5 },
   description: { type: String },
   questions: [
     {

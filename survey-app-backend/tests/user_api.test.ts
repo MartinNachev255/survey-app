@@ -4,7 +4,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import app from '../src/app';
 import User from '../src/modules/User';
-import Survey from '../src/modules/Survey';
 
 const api = supertest(app);
 
@@ -16,7 +15,6 @@ const initialUser = {
 
 beforeEach(async () => {
   await User.deleteMany({});
-  await Survey.deleteMany({});
 
   const saltRound = 10;
   const passwordHash = await bcrypt.hash(initialUser.password, saltRound);
@@ -44,6 +42,23 @@ describe('Add user to database', () => {
     expect(response.body.token).toBeDefined();
     expect(response.body.username).toBe(newUser.username);
     expect(response.body.name).toBe(newUser.name);
+  });
+
+  test('Adding user is successful with exact minimum length for credentials', async () => {
+    const newUser = {
+      username: 'usr',
+      name: 'usr',
+      password: 'pws',
+    };
+
+    const response = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.token).toBeDefined();
+    expect(response.body.username).toBe(newUser.username);
   });
 
   test('Adding user fails with duplicate username', async () => {
@@ -112,6 +127,36 @@ describe('Add user to database', () => {
 
     expect(response.body.message).toBe('Validation error');
     expect(response.body.details.fieldErrors.password).toBeDefined();
+  });
+
+  test('User passwords gets hashed successfully', async () => {
+    const newUser = {
+      username: 'newUser',
+      name: 'newUser',
+      password: 'pass',
+    };
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const savedNewUser = await User.findOne({ username: 'newUser' });
+
+    let newUserHashedPassword: boolean;
+
+    expect(savedNewUser?.password).not.toBe(newUser.password);
+
+    if (savedNewUser) {
+      newUserHashedPassword = await bcrypt.compare(
+        newUser.password,
+        savedNewUser.password,
+      );
+    } else {
+      newUserHashedPassword = false;
+    }
+
+    expect(newUserHashedPassword).toBe(true);
   });
 });
 

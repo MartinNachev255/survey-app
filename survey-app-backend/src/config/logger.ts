@@ -5,10 +5,17 @@ import { StreamOptions } from 'morgan';
 
 const logDir = path.join(process.cwd(), '../logs/');
 
-const levels = { error: 0, warn: 1, info: 2, http: 3, debug: 4 };
+const levels = { test: -1, error: 0, warn: 1, info: 2, http: 3, debug: 4 };
 const level = (): string => {
+  if (process.env.NODE_ENV === 'test') return 'test';
+
   const env = process.env.NODE_ENV || 'development';
   return env === 'development' ? 'debug' : 'info';
+};
+
+const consoleLogLevel = (): string => {
+  const env = process.env.NODE_ENV === 'test' ? 'test' : 'debug';
+  return env;
 };
 
 const colors = {
@@ -45,7 +52,7 @@ const fileJsonFormat = format.combine(
 
 const loggerTransports: winston.transport[] = [
   new transports.Console({
-    level: 'debug',
+    level: consoleLogLevel(),
     format: consoleFormat,
   }),
 
@@ -60,7 +67,7 @@ const loggerTransports: winston.transport[] = [
   }),
 
   new DailyRotateFile({
-    level: 'http',
+    level: process.env.NODE_ENV === 'test' ? 'test' : 'http',
     dirname: logDir,
     filename: 'app-%DATE%.log',
     datePattern: 'DD-MM-YYYY',

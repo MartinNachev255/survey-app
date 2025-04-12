@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import { MONGODB_URI } from './env';
 import logger from './logger';
-
-dotenv.config();
 
 mongoose.set('strictQuery', false);
 

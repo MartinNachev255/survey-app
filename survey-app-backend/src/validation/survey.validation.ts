@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
 export const newSurveyEntrySchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string(),
+  title: z.string().min(5, 'Title need to be at least 5 characters long'),
+  description: z.string().optional(),
   questions: z
     .array(
       z.object({
-        question: z.string().min(1, 'Question text is required'), // Matches req.body's 'question'
+        question: z.string().min(1, 'Question text is required'),
         answers: z
           .array(
             z.object({
@@ -14,6 +14,7 @@ export const newSurveyEntrySchema = z.object({
               timesAnswered: z.number().default(0),
             }),
           )
+          .min(2, 'Need to have at least 2 answers')
           .max(5, 'A question can have 4 answers at most'),
       }),
     )

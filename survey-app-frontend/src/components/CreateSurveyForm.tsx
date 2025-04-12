@@ -26,7 +26,7 @@ const CreateSurveyForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  // The questions represent an array of objects that 
+  // The questions represent an array of objects that
   // holds the text of the question and an array for the answers
   const [questions, setQuestions] = useState<IQuestion[]>([
     {
@@ -56,7 +56,7 @@ const CreateSurveyForm = () => {
 
   const user = useSelector<RootStore, IUser | null>((state) => state.user);
 
-  // Checks if user is logged in 
+  // Checks if user is logged in
   useEffect(() => {
     if (!user) {
       navigate('/login');
@@ -117,7 +117,6 @@ const CreateSurveyForm = () => {
           fullWidth
           multiline
           rows={4}
-          required
           margin="normal"
         />
 
@@ -216,7 +215,8 @@ const CreateSurveyForm = () => {
                   // Adds an additional answer to the array
                   onChange={(e) => {
                     const newQuestions = [...questions];
-                    newQuestions[index].answers[aIndex].answerText = e.target.value;
+                    newQuestions[index].answers[aIndex].answerText =
+                      e.target.value;
                     setQuestions(newQuestions);
                   }}
                 />

@@ -59,6 +59,7 @@ describe('Get surveys from database', () => {
 
     expect(response.body).toBeDefined();
 
+    expect(response.body.length).toBe(initialSurveys.length);
     expect(response.body[0].title).toBe(initialSurveys[0].title);
   });
 });
@@ -74,6 +75,9 @@ describe('Add survey to database', () => {
           answers: [
             {
               answerText: 'a1',
+            },
+            {
+              answerText: 'a2',
             },
           ],
         },
@@ -91,9 +95,118 @@ describe('Add survey to database', () => {
     expect(response.body.author).toBe(initialUser.name);
   });
 
+  test('Adding survey without description is successful', async () => {
+    const newSurvey = {
+      title: 'Title',
+      questions: [
+        {
+          question: 'q1',
+          answers: [
+            {
+              answerText: 'a1',
+            },
+            {
+              answerText: 'a2',
+            },
+          ],
+        },
+      ],
+    };
+
+    const response = await api
+      .post('/api/survey')
+      .set('Authorization', `Bearer ${authToken}`)
+      .send(newSurvey)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.title).toBe(newSurvey.title);
+    expect(response.body.author).toBe(initialUser.name);
+    expect(response.body.description).not.toBeDefined();
+  });
+
   test('Adding survey fails with duplicate title', async () => {
     const newSurvey = {
       title: initialSurveys[0].title,
+      description: 'Description',
+      questions: [
+        {
+          question: 'q1',
+          answers: [
+            {
+              answerText: 'a1',
+            },
+            {
+              answerText: 'a2',
+            },
+          ],
+        },
+      ],
+    };
+
+    const response = await api
+      .post('/api/survey')
+      .set('Authorization', `Bearer ${authToken}`)
+      .send(newSurvey)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe('Duplicate key');
+    expect(response.body.keyValue.title).toBe(initialSurveys[0].title);
+  });
+
+  test('Adding survey fails without title', async () => {
+    const newSurvey = {
+      description: 'Description',
+      questions: [
+        {
+          question: 'q1',
+          answers: [
+            {
+              answerText: 'a1',
+            },
+            {
+              answerText: 'a2',
+            },
+          ],
+        },
+      ],
+    };
+
+    const response = await api
+      .post('/api/survey')
+      .set('Authorization', `Bearer ${authToken}`)
+      .send(newSurvey)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe('Validation error');
+    expect(response.body.details.fieldErrors.title).toBeDefined();
+  });
+
+  test('Adding survey fails without questions', async () => {
+    const newSurvey = {
+      title: 'Title',
+      description: 'Description',
+    };
+
+    const response = await api
+      .post('/api/survey')
+      .set('Authorization', `Bearer ${authToken}`)
+      .send(newSurvey)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toBe('Validation error');
+    expect(response.body.details.fieldErrors.questions).toBeDefined();
+  });
+
+  test('Adding survey fails without at least 2 answers', async () => {
+    const newSurvey = {
+      title: 'Title',
       description: 'Description',
       questions: [
         {
@@ -115,8 +228,10 @@ describe('Add survey to database', () => {
       .expect('Content-Type', /application\/json/);
 
     expect(response.body.success).toBe(false);
-    expect(response.body.message).toBe('Duplicate key');
-    expect(response.body.keyValue.title).toBe(initialSurveys[0].title);
+    expect(response.body.message).toBe('Validation error');
+    expect(response.body.details.fieldErrors.questions).toStrictEqual([
+      'Need to have at least 2 answers',
+    ]);
   });
 
   test('Adding survey fails without token', async () => {
@@ -130,12 +245,21 @@ describe('Add survey to database', () => {
             {
               answerText: 'a1',
             },
+            {
+              answerText: 'a2',
+            },
           ],
         },
       ],
     };
 
-    await api.post('/api/survey').send(newSurvey).expect(401);
+    const response = await api
+      .post('/api/survey')
+      .send(newSurvey)
+      .expect(401)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body.message).toBe('unauthorized');
   });
 });
 
