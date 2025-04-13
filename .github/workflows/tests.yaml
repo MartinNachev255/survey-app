@@ -23,7 +23,7 @@ jobs:
         run: npm install
       - name: Run tests
         working-directory: ./survey-app-backend
-        run: SECRET="SECRET" npm run test
+        run: npm run test
 
       - name: Tear down MongoDB container
         if: always()
