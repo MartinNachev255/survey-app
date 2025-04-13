@@ -13,12 +13,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          
       - name: Install Frontend Dependencies
         working-directory: ./survey-app-frontend
         run: npm install
       - name: Check Frontend Style
         working-directory: ./survey-app-frontend
         run: npm run lint
+
       - name: Install Backend Dependencies
         working-directory: ./survey-app-backend
         run: npm install
