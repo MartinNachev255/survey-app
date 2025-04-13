@@ -1,0 +1,28 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: '20'
+      - name: Start MongoDB container
+        run: docker compose -f docker-compose-test.yml up -d 
+      
+      - name: Install Backend Dependencies
+        working-directory: ./survey-app-backend
+        run: npm install
+      - name: Run tests
+        working-directory: ./survey-app-backend
+        run: SECRET="SECRET" npm run test
+
+      - name: Tear down MongoDB container
+        if: always()
+        run: docker compose -f docker-compose-test.yml down

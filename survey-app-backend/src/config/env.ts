@@ -12,7 +12,8 @@ let MONGODB_URI_FROM_ENV: string | undefined;
 if (NODE_ENV === 'production') {
   MONGODB_URI_FROM_ENV = process.env.MONGODB_URI_PROD;
 } else if (NODE_ENV === 'test') {
-  MONGODB_URI_FROM_ENV = process.env.MONGODB_URI_TEST;
+  MONGODB_URI_FROM_ENV =
+    'mongodb://user:password@localhost:27017/survey-app?authSource=admin';
 } else {
   MONGODB_URI_FROM_ENV = process.env.MONGODB_URI_DEV;
 }
