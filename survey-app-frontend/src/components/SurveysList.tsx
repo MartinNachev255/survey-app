@@ -144,7 +144,7 @@ const SurveyList = () => {
                         Questions: {survey.questions.length}
                       </Typography>
                     </Box>
-                    <Box sx={{ position: 'absolute', bottom: 16, right: 16 }}>
+                    <Box sx={{ position: { sm:'absolute', md:'absolute', lg: 'absolute' }, bottom: 16, right: 16, my: { xs: 1 }}}>
                       {/* Show delete button only if the logged-in user is the author */}
                       {survey.author === user?.name && (
                         <Button
