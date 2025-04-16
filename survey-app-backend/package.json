@@ -11,6 +11,7 @@
     "start": "cross-env NODE_ENV=production tsx index.ts",
     "dev": "cross-env NODE_ENV=development tsx index.ts",
     "test": "cross-env NODE_ENV=test SECRET=SECRET jest --runInBand",
+    "start:test": "cross-env NODE_ENV=test SECRET=SECRET tsx index.ts",
     "lint": "eslint .",
     "prettier": "prettier . --write"
   },

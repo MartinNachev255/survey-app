@@ -18,6 +18,7 @@ export const newSurveyEntrySchema = z.object({
           .max(5, 'A question can have 4 answers at most'),
       }),
     )
+    .min(1, 'Need at least 1 question')
     .max(20, "Can't have more then 20 questions"),
 });
 

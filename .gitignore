@@ -136,4 +136,12 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Logs
 /logs/
+
+# Playwright
+**/node_modules/
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/playwright/.cache/
