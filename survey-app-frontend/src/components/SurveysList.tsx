@@ -168,18 +168,17 @@ const SurveyList = () => {
                       </Button>
                       {/* Disable button and show tooltip if user is not logged in */}
                       <Tooltip title={!user ? 'Login to take survey' : ''}>
-                        <RouterLink
-                          to={`/survey/${survey.id}`}
-                          style={{ textDecoration: 'none' }}
-                        >
+                        <span>
                           <Button
                             variant="contained"
                             size="small"
-                            disabled={user ? false : true}
+                            component={RouterLink}
+                            to={`/survey/${survey.id}`}
+                            disabled={!user}
                           >
                             Take Survey
                           </Button>
-                        </RouterLink>
+                        </span>
                       </Tooltip>
                     </Box>
                   </CardContent>

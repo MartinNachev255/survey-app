@@ -165,7 +165,9 @@ const SurveyResponseForm = () => {
           <Button
             variant="contained"
             onClick={handleSubmit}
-            disabled={isSubmitting}
+            // Disables button if form is being submitted or 
+            // if not all question have been answered 
+            disabled={isSubmitting || (selectedAnswers.length !== survey?.questions.length)}
           >
             {isSubmitting ? 'Submitting...' : 'Submit'}
           </Button>
