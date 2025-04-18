@@ -27,7 +27,7 @@ export const registerUser = async (
   await page.getByRole('textbox', { name: 'Name', exact: true }).fill(name);
   await page.getByRole('textbox', { name: 'Password' }).fill(password);
 
-  await page.getByRole('button', { name: 'Sign up' }).click();
+  await page.getByRole('button', { name: 'Sign up' }).click({ timeout: 5000 });
 };
 
 export const loginUser = async (

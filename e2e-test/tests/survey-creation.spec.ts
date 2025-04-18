@@ -2,7 +2,8 @@ import { test, expect } from '@playwright/test';
 import userAuthHelper from './user-auth-helper';
 import surveyHelper from './survey-creation-helper';
 
-test.beforeAll(async ({ request }) => {
+test.beforeEach(async ({ page, request }) => {
+  await request.post('/api/testing/resetDB');
   const response = await request.post('/api/users', {
     data: {
       username: 'createSurvey',
@@ -11,13 +12,10 @@ test.beforeAll(async ({ request }) => {
     },
   });
   expect(response).toBeOK();
-});
-
-test.beforeEach(async ({ page }) => {
   await page.goto('');
 
   await userAuthHelper.loginUser(page, 'createSurvey', 'password');
-  await expect(await page.getByText('Successfully logged in')).toBeVisible();
+  await expect(page.getByText('Successfully logged in')).toBeVisible();
 });
 
 test.describe('Survey creation', () => {
@@ -30,6 +28,19 @@ test.describe('Survey creation', () => {
 
     await expect(snackBarNotification).toBeVisible();
     await expect(page).toHaveURL('');
+  });
+
+  test('Creating survey is not successful with duplicate Title', async ({
+    page,
+  }) => {
+    await surveyHelper.createSurvey(page, 'Title', 'Description', 2, 3);
+    await surveyHelper.createSurvey(page, 'Title', 'Description', 2, 3);
+
+    await expect(
+      page.getByText('Survey successfully created'),
+    ).not.toBeVisible();
+
+    await expect(page).not.toHaveURL('');
   });
 
   test('Creating survey is successful without Description', async ({
@@ -92,9 +103,14 @@ test.describe('Survey creation', () => {
 
     await expect(page.getByText('Survey successfully created')).toBeVisible();
 
-    page.on('dialog', (dialog) => dialog.accept());
-    await page.getByRole('button', { name: 'Delete' }).last().click();
+    const surveyToDelete = await page
+      .locator('div')
+      .filter({ hasText: 'Survey to delete' });
 
+    page.on('dialog', (dialog) => dialog.accept());
+    await surveyToDelete.getByRole('button', { name: 'Delete' }).last().click();
+
+    await expect(page.getByText('Survey to delete')).not.toBeVisible();
     await expect(page.getByText('Survey deleted')).toBeVisible();
   });
 });

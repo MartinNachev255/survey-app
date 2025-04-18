@@ -4,6 +4,7 @@ import userRouter from './controllers/user.controller';
 import loginRouter from './controllers/login.controller';
 import errorHandler from './middlewares/errorHandler';
 import surveyRouter from './controllers/survey.controller';
+import testingRouter from './controllers/testing.contoller';
 import cors from 'cors';
 import morgan from 'morgan';
 import { stream } from './config/logger';
@@ -21,6 +22,11 @@ connectDB();
 app.use('/api/users', userRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/survey', surveyRouter);
+
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing/resetDB', testingRouter);
+}
+
 app.use(errorHandler);
 
 export default app;

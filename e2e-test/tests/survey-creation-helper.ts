@@ -6,7 +6,9 @@ export const createSurvey = async (
   page: Page,
   title: string,
   description: string,
+  // The number of question to add (starts with 1)
   addQuestions: number,
+  // The number of answers to add (starts with 1, can have up to 4)
   addAnswersPerQuestion: answerLimit,
 ): Promise<void> => {
   const createSurveyButton = await page

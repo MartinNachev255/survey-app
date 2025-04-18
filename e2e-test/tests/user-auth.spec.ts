@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import userAuthHelper from './user-auth-helper';
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page, request }) => {
+  await request.post('/api/testing/resetDB');
   await page.goto('');
 });
 
@@ -20,24 +21,57 @@ test.describe('User authentication', () => {
     await expect(navigationBarUserAvatar).toBeVisible();
   });
 
-  test('User registration fails with duplicate username', async ({ page }) => {
-    await userAuthHelper.registerUser(page, 'user', 'name', 'password');
+  test('User registration fails with duplicate username', async ({
+    page,
+    request,
+  }) => {
+    const response = await request.post('/api/users', {
+      data: {
+        username: 'testUser',
+        name: 'testUser',
+        password: 'password',
+      },
+    });
+    await expect(response).toBeOK();
+
+    await userAuthHelper.registerUser(page, 'testUser', 'newUser', 'password');
 
     const errorNotification = await page.getByText('username already exists');
 
     await expect(errorNotification).toBeVisible();
   });
 
-  test('User registration fails with duplicate name', async ({ page }) => {
-    await userAuthHelper.registerUser(page, 'NewUser', 'user', 'password');
+  test('User registration fails with duplicate name', async ({
+    page,
+    request,
+  }) => {
+    const response = await request.post('/api/users', {
+      data: {
+        username: 'testUser',
+        name: 'testUser',
+        password: 'password',
+      },
+    });
+    await expect(response).toBeOK();
+
+    await userAuthHelper.registerUser(page, 'NewUser', 'testUser', 'password');
 
     const errorNotification = await page.getByText('name already exists');
 
     await expect(errorNotification).toBeVisible();
   });
 
-  test('User can login with valid credentials', async ({ page }) => {
-    await userAuthHelper.loginUser(page, 'user', 'password');
+  test('User can login with valid credentials', async ({ page, request }) => {
+    const response = await request.post('/api/users', {
+      data: {
+        username: 'testUser',
+        name: 'testUser',
+        password: 'password',
+      },
+    });
+    await expect(response).toBeOK();
+
+    await userAuthHelper.loginUser(page, 'testUser', 'password');
 
     const pageTitleHeading = await page.getByText(
       'Full-Stack Survey Application',
@@ -49,8 +83,20 @@ test.describe('User authentication', () => {
     await expect(snackBarNotification).toBeVisible();
   });
 
-  test('User login fails with invalid credentials', async ({ page }) => {
-    await userAuthHelper.loginUser(page, 'user', 'gibberish');
+  test('User login fails with invalid credentials', async ({
+    page,
+    request,
+  }) => {
+    const response = await request.post('/api/users', {
+      data: {
+        username: 'testUser',
+        name: 'testUser',
+        password: 'password',
+      },
+    });
+    await expect(response).toBeOK();
+
+    await userAuthHelper.loginUser(page, 'testUser', 'gibberish');
 
     const errorNotification = await page.getByText(
       'Invalid username or password',
