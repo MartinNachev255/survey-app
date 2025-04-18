@@ -1,6 +1,5 @@
-import express, { NextFunction } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import User from '../modules/User';
-import { Request, Response } from 'express';
 import userServices from '../services/user.service';
 import { NewUserEntry, NewUserEntryNoPass } from '../types/user.types';
 import { newUserParser } from '../utils/validationParsers';

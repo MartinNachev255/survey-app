@@ -2,6 +2,7 @@
   {
     "title": "Customer Service Feedback",
     "description": "Tell us about your recent support interaction.",
+    "author": "Test User",
     "questions": [
       {
         "question": "How satisfied were you with the support agent?",
@@ -34,6 +35,7 @@
   {
     "title": "Product Satisfaction Survey",
     "description": "Let us know how you feel about our latest product.",
+    "author": "Test User",
     "questions": [
       {
         "question": "How easy was the product setup?",

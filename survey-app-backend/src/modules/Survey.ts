@@ -26,10 +26,10 @@ const surveySchema = new Schema<ISurvey>({
 });
 
 surveySchema.set('toJSON', {
-  transform: (_document, retrurnedObject) => {
-    retrurnedObject.id = retrurnedObject._id.toString();
-    delete retrurnedObject._id;
-    delete retrurnedObject.__v;
+  transform: (_document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
   },
 });
 
