@@ -1,0 +1,43 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, e2e-tests]
+  pull_request:
+    branches: [main]
+
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: '20'
+      - name: Start MongoDB container
+        run: docker compose -f docker-compose-test.yml up -d 
+
+      - name: Install Frontend Dependencies
+        working-directory: ./survey-app-frontend
+        run: npm ci
+      - name: Build Frontend
+        working-directory: ./survey-app-frontend
+        run: npm run build
+      - name: Move dist to Backend
+        working-directory: ./survey-app-frontend
+        run: mv dist ../survey-app-backend
+        
+      - name: Install Backend Dependencies
+        working-directory: ./survey-app-backend
+        run: npm ci
+      - name: Install Playwright Dependencies
+        working-directory: ./e2e-tests
+        run: npm ci
+      - name: Run E2E Tests
+        working-directory: ./e2e-tests
+        run: npm run test
+
+      - name: Tear down MongoDB container
+        if: always()
+        run: docker compose -f docker-compose-test.yml down
