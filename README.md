@@ -222,7 +222,7 @@ Docker is required to provide a database environment for testing.
     ```bash
     docker compose -f docker-compose-db.yml up -d
     ```
-2.  **Setup & Run Application:** Follow the [Manual Setup](#manual-setup-without-docker) steps 1-4 to build the frontend and install the backend dependencies.
+2.  **Setup the Application:** Follow the [Manual Setup](#manual-setup-without-docker) steps 1-4 to build the frontend and install the backend dependencies.
 3.  **Install E2E Test Dependencies:**
     ```bash
     cd ../e2e-tests # Navigate from survey-app-backend
@@ -260,4 +260,4 @@ The backend requires environment variables set in a `.env` file within the `surv
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
