@@ -26,6 +26,6 @@ jobs:
       - name: Install Backend Dependencies
         working-directory: ./survey-app-backend
         run: npm install
-      - name: Check Frontend Style
+      - name: Check Backend Style
         working-directory: ./survey-app-backend
         run: npm run lint
