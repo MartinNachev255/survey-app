@@ -26,6 +26,15 @@ const CreateSurveyForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
+  const [invalidFormNotif, setInvalidFormNotif] = useState<string[]>([]);
+
+  const displayInvalidFormNotif = (messages: string[]) => {
+    setInvalidFormNotif(messages);
+    setTimeout(() => {
+      setInvalidFormNotif([]);
+    }, 5000);
+  };
+
   // The questions represent an array of objects that
   // holds the text of the question and an array for the answers
   const [questions, setQuestions] = useState<IQuestion[]>([
@@ -48,10 +57,54 @@ const CreateSurveyForm = () => {
       questions: questions,
     };
 
-    await surveyService.createNewSurvey(newSurvey);
+    try {
+      await surveyService.createNewSurvey(newSurvey);
 
-    showNotification('Survey successfully created');
-    navigate('/');
+      showNotification('Survey successfully created');
+      navigate('/');
+    } catch (exception: unknown) {
+      let errorMessage =
+        exception instanceof Error ? exception.message : 'An error occurred';
+      if (
+        exception &&
+        typeof exception === 'object' &&
+        'response' in exception
+      ) {
+        const apiError = exception as {
+          response: {
+            data: {
+              message: string;
+              details?: {
+                formErrors?: string[];
+                fieldErrors?: Record<string, string[]>;
+              };
+            };
+          };
+        };
+        errorMessage = apiError.response.data.message;
+
+        if (apiError.response.data.details) {
+          const details = apiError.response.data.details;
+          const errors: string[] = [];
+
+          if (details.formErrors && details.formErrors.length > 0) {
+            errors.push(...details.formErrors);
+          }
+
+          if (details.fieldErrors) {
+            Object.values(details.fieldErrors).forEach((fieldErrs) => {
+              errors.push(...fieldErrs);
+            });
+          }
+
+          if (errors.length > 0) {
+            displayInvalidFormNotif(errors);
+            return;
+          }
+        }
+      }
+      displayInvalidFormNotif([errorMessage]);
+    }
   };
 
   const user = useSelector<RootStore, IUser | null>((state) => state.user);
@@ -237,6 +290,24 @@ const CreateSurveyForm = () => {
             ))}
           </Paper>
         ))}
+
+        {invalidFormNotif.length > 0 && (
+          <Box mb={2}>
+            <Paper elevation={1}>
+              <Box
+                sx={{ p: { xs: 1, md: 2, lg: 2 } }}
+                border={'1px solid rgba(255, 0, 0, 0.7)'}
+                borderRadius={2}
+              >
+                {invalidFormNotif.map((msg, index) => (
+                  <Typography key={index} color="error" align="center">
+                    • {msg}
+                  </Typography>
+                ))}
+              </Box>
+            </Paper>
+          </Box>
+        )}
 
         <Box
           sx={{
