@@ -70,16 +70,16 @@ const LoginForm = () => {
     } catch (exception: unknown) {
       let errorMessage =
         exception instanceof Error ? exception.message : 'An error occurred';
-      // Attempt to extract specific error message from Axios response data
+      // Attempt to extract specific error message from response data
       if (
         exception &&
         typeof exception === 'object' &&
         'response' in exception
       ) {
-        const axiosError = exception as {
+        const apiError = exception as {
           response: { data: { message: string } };
         };
-        errorMessage = axiosError.response.data.message;
+        errorMessage = apiError.response.data.message;
       }
       displayInvalidCredentialsNotif(errorMessage);
     }

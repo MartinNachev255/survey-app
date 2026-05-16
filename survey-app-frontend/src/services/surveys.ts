@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { AnswerSelection, NewSurveyEntry } from '../utils/types';
 
@@ -28,42 +27,88 @@ export const isTokenExpired = (): boolean => {
 };
 
 const getAllSurveys = async () => {
-  const config = {};
+  const response = await fetch(baseUrl);
+  const data = await response.json();
 
-  const res = await axios.get(baseUrl, config);
-  return res.data;
+  if (!response.ok) {
+    throw {
+      response: {
+        data: data,
+      },
+    };
+  }
+
+  return data;
 };
 
 const submitAnswers = async (surveyId: string, answers: AnswerSelection[]) => {
-  const config = {
-    headers: { Authorization: token },
-  };
+  const response = await fetch(`${baseUrl}/${surveyId}/respond`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    body: JSON.stringify(answers),
+  });
 
-  const res = await axios.post(
-    `${baseUrl}/${surveyId}/respond`,
-    answers,
-    config,
-  );
-  return res.data;
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw {
+      response: {
+        data: data,
+      },
+    };
+  }
+
+  return data;
 };
 
 const createNewSurvey = async (newSurvey: NewSurveyEntry) => {
-  const config = {
-    headers: { Authorization: token },
-  };
+  const response = await fetch(baseUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token || '',
+    },
+    body: JSON.stringify(newSurvey),
+  });
 
-  const res = await axios.post(baseUrl, newSurvey, config);
+  const data = await response.json();
 
-  return res.data;
+  if (!response.ok) {
+    throw {
+      response: {
+        data: data,
+      },
+    };
+  }
+
+  return data;
 };
 
 const deleteSurvey = async (id: string) => {
-  const config = {
-    headers: { Authorization: token },
-  };
+  const response = await fetch(`${baseUrl}/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: token || '',
+    },
+  });
 
-  const req = await axios.delete(`${baseUrl}/${id}`, config);
-  return req.data;
+  if (!response.ok) {
+    const data = await response.json();
+    throw {
+      response: {
+        data: data,
+      },
+    };
+  }
+
+  // Fetch doesn't automatically parse JSON, and sometimes DELETE returns 204 No Content.
+  if (response.status === 204) {
+    return null;
+  }
+  return await response.json();
 };
 
 export default {
