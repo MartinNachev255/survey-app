@@ -27,7 +27,7 @@ const surveySchema = new Schema<ISurvey>({
 
 surveySchema.set('toJSON', {
   transform: (_document, returnedObject) => {
-    const { _id, __v, ...rest } = returnedObject;
+    const { _id, __v: _, ...rest } = returnedObject;
     return {
       ...rest,
       id: _id.toString(),

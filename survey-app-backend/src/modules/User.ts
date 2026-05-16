@@ -29,7 +29,7 @@ const userSchema = new Schema<IUser>({
 
 userSchema.set('toJSON', {
   transform: (_document, returnedObject) => {
-    const { _id, __v, password, ...rest } = returnedObject;
+    const { _id, __v, password: _password, ...rest } = returnedObject;
     return {
       ...rest,
       id: _id.toString(),
