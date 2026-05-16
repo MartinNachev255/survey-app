@@ -10,7 +10,7 @@ test.describe('Landing page', () => {
       'Full-Stack Survey Application',
     );
     const pageDescriptionParagraph = await page.getByText(
-      'This project demonstrates a full-stack web application built using React xdd',
+      'This project demonstrates a full-stack web application built using React',
     );
 
     await expect(pageTitleHeading).toBeVisible();
