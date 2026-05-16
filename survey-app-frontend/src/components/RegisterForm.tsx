@@ -81,7 +81,7 @@ const RegisterForm = () => {
         typeof exception === 'object' &&
         'response' in exception
       ) {
-        const axiosError = exception as {
+        const apiError = exception as {
           response: {
             data: {
               keyValue?: object | undefined;
@@ -90,16 +90,16 @@ const RegisterForm = () => {
           };
         };
         if (
-          axiosError.response.data.message.includes('Duplicate key') &&
-          axiosError.response.data.keyValue
+          apiError.response.data.message.includes('Duplicate key') &&
+          apiError.response.data.keyValue
         ) {
           // Check for specific MongoDB duplicate key error and extract the field name
           const duplicateKey = Object.keys(
-            axiosError.response.data.keyValue,
+            apiError.response.data.keyValue,
           ).toString();
           errorMessage = `${duplicateKey} already exists`;
         } else {
-          errorMessage = axiosError.response.data.message;
+          errorMessage = apiError.response.data.message;
         }
       }
       displayInvalidCredentialsNotif(errorMessage);

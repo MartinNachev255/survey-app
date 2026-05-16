@@ -101,7 +101,7 @@ This is the simplest way to get the entire application (backend API, frontend se
 2.  From the **root directory** (`survey-app/`), build and start the services:
     ```bash
     # Use --build to create fresh images, including the latest frontend build
-    docker-compose up --build -d
+    docker compose up --build -d
     ```
     *   The `-d` flag runs the containers in detached mode (in the background).
 
@@ -109,14 +109,14 @@ This is the simplest way to get the entire application (backend API, frontend se
 
 4.  **To view logs:**
     ```bash
-    docker-compose logs -f
+    docker compose logs -f
     ```
 
 5.  **To stop the services:**
     ```bash
-    docker-compose down
+    docker compose down
     ```
-    *   Use `docker-compose down -v` to also remove the database volume if you want to start fresh.
+    *   Use `docker compose down -v` to also remove the database volume if you want to start fresh.
 
 ### Manual Setup (Without Docker)
 
@@ -193,57 +193,43 @@ This method requires manually installing dependencies, building the frontend, an
 
 ## Running Tests
 
-Docker is required to provide a database environment for testing.
+Docker is the recommended way to run all tests to ensure a consistent environment.
 
-**Backend Tests (Jest/Supertest)**
+### Backend Tests (Jest/Supertest)
 
 1.  **Start Test Database:** From the root directory (`survey-app/`):
     ```bash
     docker compose -f docker-compose-db.yml up -d
     ```
-2.  **Install Backend Dependencies (if not already done):**
+2.  **Run Backend Tests:** In the `survey-app-backend/` directory:
     ```bash
-    cd survey-app-backend
     npm install
-    ```
-3.  **Run Backend Tests:** In the `survey-app-backend/` directory:
-    ```bash
-    # Ensure .env has MONGODB_URI_DEV pointing to the test DB if needed by tests
     npm run test
     ```
-4.  **Stop Test Database:** When finished, from the root directory:
+3.  **Stop Test Database:**
     ```bash
-    docker compose -f docker-compose-db.yml down -v # -v removes the volume
+    docker compose -f docker-compose-db.yml down -v
     ```
 
-**End-to-End Tests (Playwright)**
+### End-to-End Tests (Playwright)
 
-1.  **Start Test Database:** (If not already running) From the root directory:
+The E2E tests are fully containerized. This will automatically spin up the database, the backend (with the built frontend), and the Playwright test runner.
+
+1.  **Run E2E Tests:** From the root directory (`survey-app/`):
     ```bash
-    docker compose -f docker-compose-db.yml up -d
+    docker compose -f docker-compose.e2e.yml up --build --abort-on-container-exit e2e
     ```
-2.  **Setup the Application:** Follow the [Manual Setup](#manual-setup-without-docker) steps 1-4 to build the frontend and install the backend dependencies.
-3.  **Install E2E Test Dependencies:**
+    *   `--abort-on-container-exit`: Stops all containers as soon as the tests finish.
+    *   The terminal will show live progress of the tests.
+
+2.  **View Results:**
+    *   **Terminal:** Test results are printed directly to the console.
+    *   **HTML Report:** A detailed report with screenshots/traces is generated at `./e2e-tests/playwright-report/index.html`.
+
+3.  **Clean Up:**
     ```bash
-    cd ../e2e-tests # Navigate from survey-app-backend
-    npm install
+    docker compose -f docker-compose.e2e.yml down -v
     ```
-4.  **Install Playwright Browsers:** (One-time setup)
-    ```bash
-    # Installs browser binaries (Chromium, Firefox, WebKit) and OS dependencies
-    npx playwright install --with-deps
-    ```
-5.  **Run E2E Tests:** In the `e2e-tests/` directory:
-    ```bash
-    # Ensure the application (frontend+backend+db) is running
-    npm run test
-    ```
-6.  **Stop Test Database & Application:**
-    *   Stop the backend server (Ctrl+C in its terminal).
-    *   From the root directory, stop the database:
-        ```bash
-        docker compose -f docker-compose-db.yml down -v
-        ```
 
 ## Environment Variables
 

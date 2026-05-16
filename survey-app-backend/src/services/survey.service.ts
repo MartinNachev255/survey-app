@@ -10,7 +10,7 @@ const getAllSurveys = async () => {
   return surveys;
 };
 
-const getSurveyById = async (surveyID: string) => {
+const getSurveyById = async (surveyID: string | string[]) => {
   const survey = await Survey.findById(surveyID);
   if (!survey) {
     throw new CustomError(`Survey with ID ${surveyID} not found`, 404);
@@ -39,7 +39,7 @@ const createNewSurvey = async (survey: NewSurveyEntry, user: IUser) => {
   return savedSurvey;
 };
 
-const deleteSurvey = async (surveyID: string, user: IUser) => {
+const deleteSurvey = async (surveyID: string | string[], user: IUser) => {
   const surveyToDelete = await Survey.findById(surveyID);
 
   if (!surveyToDelete) {
@@ -75,7 +75,7 @@ const updateSurvey = async (
   return updatedSurvey;
 };
 
-const incrementAnswers = async (surveyID: string, answers: AnswersEntry[]) => {
+const incrementAnswers = async (surveyID: string | string[], answers: AnswersEntry[]) => {
   const surveyExists = await Survey.findById(surveyID);
   if (!surveyExists) {
     throw new CustomError(`Survey with ID ${surveyID} not found`, 404);

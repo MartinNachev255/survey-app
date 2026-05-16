@@ -1,4 +1,3 @@
-import axios from 'axios';
 
 const baseUrl = '/api/login';
 
@@ -8,8 +7,25 @@ interface Credentials {
 }
 
 const login = async (credentials: Credentials) => {
-  const res = await axios.post(baseUrl, credentials);
-  return res.data;
+  const response = await fetch(baseUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(credentials),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw {
+      response: {
+        data: data,
+      },
+    };
+  }
+
+  return data;
 };
 
 export default { login };

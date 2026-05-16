@@ -29,10 +29,11 @@ const userSchema = new Schema<IUser>({
 
 userSchema.set('toJSON', {
   transform: (_document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
-    delete returnedObject.passwordHash;
+    const { _id, __v, password: _password, ...rest } = returnedObject;
+    return {
+      ...rest,
+      id: _id.toString(),
+    };
   },
 });
 
